@@ -83,6 +83,9 @@
   --gutter: clamp(16px, 5vw, 48px);
   --ease: cubic-bezier(.2, .7, .2, 1);
   --nav-h: 96px; /* sovrascritta da script.js con l'altezza reale della nav */
+  /* Posto del logo nell'intestazione: servono anche al sipario d'apertura, che fa partire il logo dal centro dello schermo */
+  --header-pt: clamp(64px, 10vw, 96px);
+  --logo-w: clamp(220px, 64vw, 380px);
 }
 
 /* ---------- Reset minimo ---------- */
@@ -141,7 +144,7 @@ data { font-variant-numeric: tabular-nums; }
 .site-header {
   position: relative; /* ancora per il selettore lingua */
   text-align: center;
-  padding: clamp(64px, 10vw, 96px) var(--gutter) clamp(52px, 9vw, 80px); /* in alto c'è la barra, in basso c'è posto per l'onda */
+  padding: var(--header-pt) var(--gutter) clamp(52px, 9vw, 80px); /* in alto c'è la barra, in basso c'è posto per l'onda */
   background: var(--brand-cream);
 }
 .site-header__overline {
@@ -155,7 +158,7 @@ data { font-variant-numeric: tabular-nums; }
 }
 .site-header__title { line-height: 0; }
 .site-header__logo {
-  width: clamp(220px, 64vw, 380px);
+  width: var(--logo-w);
   height: auto;
   margin: 0 auto;
 }
@@ -1626,45 +1629,44 @@ a.titoli__voce:hover { color: var(--ink); }
 .menu.cambio-indietro:not(.no-anim) .menu-notes { animation: pagina-da-sinistra .38s var(--ease) both; }
 
 /* ---------- Sipario d'apertura ---------- */
-/* Due metà a tutto schermo, color crema come l'intestazione, coprono la pagina. Il logo che gira è quello vero
-   dell'intestazione, portato sopra il sipario per la durata dell'animazione: quando le metà scorrono ai lati resta
-   al suo posto, senza salti. Tutto in CSS: l'ultima animazione nasconde il sipario, script.js lo toglie dal DOM
+/* Un velo a tutto schermo, color crema come l'intestazione, copre la pagina. Il logo è quello vero dell'intestazione,
+   portato sopra il velo per la durata dell'animazione: parte dal centro dello schermo e sale al suo posto facendo un
+   giro; poi il velo si dissolve e i piatti entrano a cascata (l'animazione d'ingresso di sempre, solo ritardata).
+   Tutto in CSS: a fine dissolvenza il velo è nascosto, script.js lo toglie dal DOM e mette senza-intro su <html>
    (dopoSipario). */
 .sipario {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  overflow: hidden;
-  animation: sipario-fine 1ms linear 2.05s forwards;
+  background: var(--brand-cream);
+  animation: sipario-svanisce .55s ease-in-out 1.3s forwards;
 }
 .senza-intro .sipario { display: none; }
-.sipario__meta {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  background: var(--brand-cream);
-  animation: .7s cubic-bezier(.7, 0, .2, 1) 1.35s both;
-}
-/* La metà sinistra copre 1px oltre il centro: nessuna fessura tra le due */
-.sipario__meta--sx { left: 0; width: calc(50% + 1px); animation-name: sipario-apre-sx; }
-.sipario__meta--dx { right: 0; animation-name: sipario-apre-dx; }
-/* Il logo dell'intestazione: sopra il sipario solo finché dura (lo z-index è nell'animazione, poi torna quello di
-   sempre e il logo scorre di nuovo sotto la nav) */
+/* Il logo dell'intestazione: sopra il velo solo finché dura (lo z-index è nell'animazione, poi torna quello di
+   sempre e il logo scorre di nuovo sotto la nav). --intro-dy è la distanza tra il centro dello schermo e il centro
+   del logo al suo posto (404/820 è il rapporto d'aspetto del logo). */
 html:not(.senza-intro) .site-header__logo {
+  --intro-dy: calc(50vh - var(--header-pt) - var(--logo-w) * 404 / 1640);
   position: relative;
-  animation: sipario-gira 1.15s cubic-bezier(.3, .1, .2, 1) .1s both, sipario-sopra 2.1s linear;
+  animation: sipario-logo 1.3s cubic-bezier(.6, 0, .2, 1) .1s both, sipario-sopra 1.9s linear;
 }
-@keyframes sipario-gira {
-  from { opacity: 0; transform: perspective(900px) rotateY(-360deg) scale(.82); }
-  25%  { opacity: 1; }
-  to   { opacity: 1; transform: perspective(900px) rotateY(0deg) scale(1); }
+@supports (height: 1dvh) {
+  html:not(.senza-intro) .site-header__logo { --intro-dy: calc(50dvh - var(--header-pt) - var(--logo-w) * 404 / 1640); }
+}
+/* Primo ingresso dei piatti: aspetta che il velo cominci a dissolversi */
+html:not(.senza-intro) .is-entering:not(.no-anim) .category--list2,
+html:not(.senza-intro) .is-entering:not(.no-anim) .category--spirit,
+html:not(.senza-intro) .is-entering:not(.no-anim) .dish {
+  animation-delay: calc(1.35s + var(--i, 0) * 40ms);
+}
+html:not(.senza-intro) .is-entering:not(.no-anim) .category--food .category__heading { animation-delay: 1.35s; }
+@keyframes sipario-logo {
+  from { opacity: 0; transform: translateY(var(--intro-dy)) perspective(900px) rotateY(-360deg) scale(1.08); }
+  20%  { opacity: 1; }
+  to   { opacity: 1; transform: translateY(0) perspective(900px) rotateY(0deg) scale(1); }
 }
 @keyframes sipario-sopra { from, to { z-index: 1001; } }
-/* L'ombra sul bordo interno compare solo mentre le metà si aprono: da chiuse non deve segnare il centro */
-@keyframes sipario-apre-sx { to { transform: translateX(-100%); box-shadow: 0 0 40px rgba(42, 18, 22, .22); } }
-@keyframes sipario-apre-dx { to { transform: translateX(100%); box-shadow: 0 0 40px rgba(42, 18, 22, .22); } }
-@keyframes sipario-fine { to { visibility: hidden; } }
+@keyframes sipario-svanisce { to { opacity: 0; visibility: hidden; } }
 
 /* ---------- Modale scelta lingua ---------- */
 html.is-modal-open { overflow: hidden; }
@@ -1847,8 +1849,8 @@ html.is-modal-open { overflow: hidden; }
 /* Sotto i 420px spariscono le freccine delle pillole: il testo più lungo ("Chiuso · apre domani alle 07:30") entra a 360px */
 @media (max-width: 519.98px) {
   /* Intestazione più bassa: logo più piccolo e meno aria, così i piatti cominciano più in alto */
-  .site-header { padding-top: 58px; padding-bottom: 30px; }
-  .site-header__logo { width: clamp(190px, 55vw, 250px); }
+  :root { --header-pt: 58px; --logo-w: clamp(190px, 55vw, 250px); }
+  .site-header { padding-bottom: 30px; }
   .site-header__overline { margin-top: .6rem; }
   .site-header__bar { gap: .3rem; }
   .site-header__actions { padding-left: .4rem; }

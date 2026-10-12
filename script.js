@@ -2219,8 +2219,9 @@
   var siparioEl = document.querySelector(".sipario");
 
   /**
-   * Chiama fn quando il sipario d'apertura ha finito (subito se non c'è o è già passato) e lo toglie dal DOM.
-   * L'animazione è tutta in CSS (style.css): qui si aspetta solo l'ultima, con un timer di riserva.
+   * Chiama fn quando il sipario d'apertura ha finito (subito se non c'è o è già passato), lo toglie dal DOM e mette
+   * senza-intro su <html>: da lì in poi logo e piatti non hanno più le animazioni e i ritardi dell'apertura.
+   * L'animazione è tutta in CSS (style.css): qui si aspetta solo la dissolvenza, con un timer di riserva.
    */
   function dopoSipario(fn) {
     var fatto = false;
@@ -2228,6 +2229,7 @@
       if (fatto) return;
       fatto = true;
       if (siparioEl && siparioEl.parentNode) siparioEl.parentNode.removeChild(siparioEl);
+      document.documentElement.classList.add("senza-intro");
       fn();
     }
     var stile = siparioEl ? window.getComputedStyle(siparioEl) : null;
@@ -2236,7 +2238,7 @@
       return;
     }
     siparioEl.addEventListener("animationend", function (e) { if (e.target === siparioEl) fine(); });
-    window.setTimeout(fine, 2600);
+    window.setTimeout(fine, 2400);
   }
 
   lang = detectLanguage();

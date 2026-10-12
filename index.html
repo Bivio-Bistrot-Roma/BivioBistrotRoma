@@ -31,20 +31,17 @@
       } catch (e) { /* browser senza Navigation Timing: il sipario si vede a ogni caricamento */ }
     })();
   </script>
-  <link rel="stylesheet" href="style.css?v=20261012b">
+  <link rel="stylesheet" href="style.css?v=20261012d">
   <!-- Script classici (no moduli): funziona anche da file:// — l'ordine conta -->
   <script defer src="menu-data.js?v=20261010"></script>
-  <script defer src="script.js?v=20261012"></script>
+  <script defer src="script.js?v=20261012c"></script>
 </head>
 <body>
   <a class="skip-link" href="#menu" data-i18n="skip">Vai al menu</a>
 
-  <!-- Sipario d'apertura (decorativo, solo CSS: finisce da sé anche senza JavaScript). Due metà color crema coprono la
-       pagina; il logo dell'intestazione (quello vero, portato sopra il sipario) fa un giro, poi le metà si aprono. -->
-  <div class="sipario" aria-hidden="true">
-    <div class="sipario__meta sipario__meta--sx"></div>
-    <div class="sipario__meta sipario__meta--dx"></div>
-  </div>
+  <!-- Sipario d'apertura (decorativo, solo CSS: finisce da sé anche senza JavaScript). Un velo color crema copre la
+       pagina; il logo dell'intestazione (quello vero, portato sopra il velo) fa un giro, poi il velo si dissolve. -->
+  <div class="sipario" aria-hidden="true"></div>
 
   <header class="site-header" id="top" tabindex="-1">
     <!-- Barra in alto: a sinistra lo stato aperto/chiuso; a destra i link rapidi (solo icona) e la pillola della lingua -->
