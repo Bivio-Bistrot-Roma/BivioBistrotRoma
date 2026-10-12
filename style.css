@@ -1631,15 +1631,20 @@ a.titoli__voce:hover { color: var(--ink); }
 /* ---------- Sipario d'apertura ---------- */
 /* Un velo a tutto schermo, color crema come l'intestazione, copre la pagina. Il logo è quello vero dell'intestazione,
    portato sopra il velo per la durata dell'animazione: parte dal centro dello schermo e sale al suo posto facendo un
-   giro; poi il velo si dissolve e i piatti entrano a cascata (l'animazione d'ingresso di sempre, solo ritardata).
-   Tutto in CSS: a fine dissolvenza il velo è nascosto, script.js lo toglie dal DOM e mette senza-intro su <html>
+   giro; intanto il velo si ritira dal basso verso l'alto con un bordo sfumato e i piatti entrano a cascata (l'animazione d'ingresso di sempre, solo ritardata).
+   Tutto in CSS: alla fine il velo è nascosto, script.js lo toglie dal DOM e mette senza-intro su <html>
    (dopoSipario). */
 .sipario {
   position: fixed;
   inset: 0;
   z-index: 1000;
   background: var(--brand-cream);
-  animation: sipario-svanisce .55s ease-in-out 1.6s forwards;
+  /* Maschera più alta del velo (230%): in alto è piena, in basso trasparente, in mezzo una fascia sfumata. Farla
+     scorrere verso l'alto scopre la pagina dal basso verso l'alto con un bordo morbido. */
+  -webkit-mask: linear-gradient(to bottom, #000 43.5%, transparent 56.5%) 0 0 / 100% 230% no-repeat;
+  mask: linear-gradient(to bottom, #000 43.5%, transparent 56.5%) 0 0 / 100% 230% no-repeat;
+  /* Parte insieme alla salita del logo (.1s + 25% di 1.6s) e dura quanto lei, con la stessa curva */
+  animation: sipario-svanisce 1.2s cubic-bezier(.6, 0, .2, 1) .5s forwards;
 }
 .senza-intro .sipario { display: none; }
 /* Il logo dell'intestazione: sopra il velo solo finché dura (lo z-index è nell'animazione, poi torna quello di
@@ -1648,18 +1653,18 @@ a.titoli__voce:hover { color: var(--ink); }
 html:not(.senza-intro) .site-header__logo {
   --intro-dy: calc(50vh - var(--header-pt) - var(--logo-w) * 404 / 1640);
   position: relative;
-  animation: sipario-logo 1.6s linear .1s both, sipario-sopra 2.2s linear;
+  animation: sipario-logo 1.6s linear .1s both, sipario-sopra 1.8s linear;
 }
 @supports (height: 1dvh) {
   html:not(.senza-intro) .site-header__logo { --intro-dy: calc(50dvh - var(--header-pt) - var(--logo-w) * 404 / 1640); }
 }
-/* Primo ingresso dei piatti: aspetta che il velo cominci a dissolversi */
+/* Primo ingresso dei piatti: aspetta che il velo cominci a ritirarsi */
 html:not(.senza-intro) .is-entering:not(.no-anim) .category--list2,
 html:not(.senza-intro) .is-entering:not(.no-anim) .category--spirit,
 html:not(.senza-intro) .is-entering:not(.no-anim) .dish {
-  animation-delay: calc(1.65s + var(--i, 0) * 40ms);
+  animation-delay: calc(.6s + var(--i, 0) * 40ms);
 }
-html:not(.senza-intro) .is-entering:not(.no-anim) .category--food .category__heading { animation-delay: 1.65s; }
+html:not(.senza-intro) .is-entering:not(.no-anim) .category--food .category__heading { animation-delay: .6s; }
 /* Fino al 25% il logo resta fermo al centro (compare in dissolvenza), poi sale e gira */
 @keyframes sipario-logo {
   from { opacity: 0; transform: translateY(var(--intro-dy)) perspective(900px) rotateY(-360deg) scale(1.18); }
@@ -1668,7 +1673,7 @@ html:not(.senza-intro) .is-entering:not(.no-anim) .category--food .category__hea
   to   { opacity: 1; transform: translateY(0) perspective(900px) rotateY(0deg) scale(1); }
 }
 @keyframes sipario-sopra { from, to { z-index: 1001; } }
-@keyframes sipario-svanisce { to { opacity: 0; visibility: hidden; } }
+@keyframes sipario-svanisce { to { -webkit-mask-position: 0 100%; mask-position: 0 100%; visibility: hidden; } }
 
 /* ---------- Modale scelta lingua ---------- */
 html.is-modal-open { overflow: hidden; }
