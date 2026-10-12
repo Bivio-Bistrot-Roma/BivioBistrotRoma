@@ -2238,7 +2238,7 @@
       return;
     }
     siparioEl.addEventListener("animationend", function (e) { if (e.target === siparioEl) fine(); });
-    window.setTimeout(fine, 2400);
+    window.setTimeout(fine, 2700);
   }
 
   lang = detectLanguage();
