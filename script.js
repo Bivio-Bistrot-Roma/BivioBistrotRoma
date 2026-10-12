@@ -2215,12 +2215,37 @@
     });
   }
 
+  // ---------------------------------------------------------------- Sipario d'apertura
+  var siparioEl = document.querySelector(".sipario");
+
+  /**
+   * Chiama fn quando il sipario d'apertura ha finito (subito se non c'è o è già passato) e lo toglie dal DOM.
+   * L'animazione è tutta in CSS (style.css): qui si aspetta solo l'ultima, con un timer di riserva.
+   */
+  function dopoSipario(fn) {
+    var fatto = false;
+    function fine() {
+      if (fatto) return;
+      fatto = true;
+      if (siparioEl && siparioEl.parentNode) siparioEl.parentNode.removeChild(siparioEl);
+      fn();
+    }
+    var stile = siparioEl ? window.getComputedStyle(siparioEl) : null;
+    if (!stile || stile.display === "none" || stile.visibility === "hidden") {
+      fine();
+      return;
+    }
+    siparioEl.addEventListener("animationend", function (e) { if (e.target === siparioEl) fine(); });
+    window.setTimeout(fine, 2600);
+  }
+
   lang = detectLanguage();
   setLanguage(lang, { initial: true });
   renderTabs();
   syncFromHash(true);
   syncPrivacyFromHash(); // #privacy all'avvio
-  if (!hasExplicitLanguage()) openLanguageModal(); // primo accesso, dopo il rendering del menu
+  // Primo accesso: modale lingua dopo il rendering del menu e dopo il sipario (il <dialog> gli passerebbe sopra)
+  dopoSipario(function () { if (!hasExplicitLanguage()) openLanguageModal(); });
   // Pill di stato e giorno evidenziato (pannello e footer) si aggiornano ogni minuto (senza ridisegnare il menu)
   window.setInterval(function () { renderStatus(); renderStatusPanel(); renderHours(); }, 60000);
 })();

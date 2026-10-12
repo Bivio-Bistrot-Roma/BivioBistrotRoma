@@ -1625,6 +1625,47 @@ a.titoli__voce:hover { color: var(--ink); }
 .menu.cambio-indietro:not(.no-anim) .dish-grid,
 .menu.cambio-indietro:not(.no-anim) .menu-notes { animation: pagina-da-sinistra .38s var(--ease) both; }
 
+/* ---------- Sipario d'apertura ---------- */
+/* Due metà a tutto schermo, color crema come l'intestazione, coprono la pagina. Il logo che gira è quello vero
+   dell'intestazione, portato sopra il sipario per la durata dell'animazione: quando le metà scorrono ai lati resta
+   al suo posto, senza salti. Tutto in CSS: l'ultima animazione nasconde il sipario, script.js lo toglie dal DOM
+   (dopoSipario). */
+.sipario {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  animation: sipario-fine 1ms linear 2.05s forwards;
+}
+.senza-intro .sipario { display: none; }
+.sipario__meta {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: var(--brand-cream);
+  animation: .7s cubic-bezier(.7, 0, .2, 1) 1.35s both;
+}
+/* La metà sinistra copre 1px oltre il centro: nessuna fessura tra le due */
+.sipario__meta--sx { left: 0; width: calc(50% + 1px); animation-name: sipario-apre-sx; }
+.sipario__meta--dx { right: 0; animation-name: sipario-apre-dx; }
+/* Il logo dell'intestazione: sopra il sipario solo finché dura (lo z-index è nell'animazione, poi torna quello di
+   sempre e il logo scorre di nuovo sotto la nav) */
+html:not(.senza-intro) .site-header__logo {
+  position: relative;
+  animation: sipario-gira 1.15s cubic-bezier(.3, .1, .2, 1) .1s both, sipario-sopra 2.1s linear;
+}
+@keyframes sipario-gira {
+  from { opacity: 0; transform: perspective(900px) rotateY(-360deg) scale(.82); }
+  25%  { opacity: 1; }
+  to   { opacity: 1; transform: perspective(900px) rotateY(0deg) scale(1); }
+}
+@keyframes sipario-sopra { from, to { z-index: 1001; } }
+/* L'ombra sul bordo interno compare solo mentre le metà si aprono: da chiuse non deve segnare il centro */
+@keyframes sipario-apre-sx { to { transform: translateX(-100%); box-shadow: 0 0 40px rgba(42, 18, 22, .22); } }
+@keyframes sipario-apre-dx { to { transform: translateX(100%); box-shadow: 0 0 40px rgba(42, 18, 22, .22); } }
+@keyframes sipario-fine { to { visibility: hidden; } }
+
 /* ---------- Modale scelta lingua ---------- */
 html.is-modal-open { overflow: hidden; }
 
@@ -1787,6 +1828,7 @@ html.is-modal-open { overflow: hidden; }
 /* ---------- Movimento ridotto ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .sipario { display: none; }
   *, *::before, *::after {
     animation-duration: .01ms !important;
     animation-delay: 0s !important;
@@ -1842,7 +1884,7 @@ html.is-modal-open { overflow: hidden; }
 
 /* ---------- Stampa ---------- */
 @media print {
-  .menu-nav, .to-top, .skip-link, .dish__media, .status-pill, .status-panel, .pager, .site-header__actions, .lang-menu, .lang-modal, .lightbox, .allergen-modal, .privacy-modal, .site-footer__privacy, .menu-notes__hint { display: none !important; }
+  .sipario, .menu-nav, .to-top, .skip-link, .dish__media, .status-pill, .status-panel, .pager, .site-header__actions, .lang-menu, .lang-modal, .lightbox, .allergen-modal, .privacy-modal, .site-footer__privacy, .menu-notes__hint { display: none !important; }
   body, .site-header { background: #fff; }
   .onda { display: none; }
   .site-header__logo { width: 200px; }
