@@ -125,45 +125,12 @@
   }
 
   // ---------------------------------------------------------------- Ora (ordine dinamico delle categorie)
-  /** "HH:MM" -> minuti dalla mezzanotte (NaN se malformato). Pura. */
-  function minutes(v) {
-    var m = /^(\d{1,2}):(\d{2})$/.exec(String(v));
-    return m ? parseInt(m[1], 10) * 60 + parseInt(m[2], 10) : NaN;
-  }
-
-  /**
-   * true se `now` ("HH:MM") cade nella fascia che parte da `from`. Pura.
-   * Senza `until`: da `from` fino a mezzanotte. Con `until` > `from`: from <= now < until.
-   * Con `until` <= `from` la fascia scavalca la mezzanotte: now >= from || now < until.
-   * Valori malformati -> false.
-   */
-  function inWindow(from, until, now) {
-    var a = minutes(from), n = minutes(now);
-    if (isNaN(a) || isNaN(n)) return false;
-    if (until === undefined || until === null || until === "") return n >= a;
-    var u = minutes(until);
-    if (isNaN(u)) return false;
-    return u > a ? (n >= a && n < u) : (n >= a || n < u);
-  }
-
-  /**
-   * Ora corrente "HH:MM" a Roma (fallback: ora locale se timeZone non è supportato).
-   * SOLO PER DEBUG: `?ora=HH:MM` nell'URL forza l'ora (ignorato se malformato).
-   */
-  function currentTime() {
-    try {
-      var forced = new URLSearchParams(location.search).get("ora");
-      if (forced && /^([01]\d|2[0-3]):[0-5]\d$/.test(forced)) return forced;
-    } catch (e) { /* URLSearchParams assente */ }
-    try {
-      var parts = new Intl.DateTimeFormat("it-IT", { timeZone: "Europe/Rome", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date());
-      var h = "", m = "";
-      parts.forEach(function (p) { if (p.type === "hour") h = p.value; else if (p.type === "minute") m = p.value; });
-      if (h && m) return h + ":" + m;
-    } catch (e) { /* Intl/timeZone non supportati: ora locale */ }
-    var d = new Date();
-    return (d.getHours() < 10 ? "0" : "") + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
-  }
+  // Calcoli su ora e giorno di Roma: stanno in ../assets/comune.js (in comune con il sito del locale)
+  var COMUNE = window.BIVIO_COMUNE;
+  var inWindow = COMUNE.inWindow;
+  var currentTime = COMUNE.currentTime;
+  var currentDay = COMUNE.currentDay;
+  var shownTime = COMUNE.shownTime;
 
   /**
    * Categorie della sezione nell'ordine di rendering. Se la sezione ha `orderByTime` e una sua fascia è attiva, vale
@@ -191,35 +158,12 @@
   }
 
   // ---------------------------------------------------------------- Orari
-  var DAY_KEYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  // Il calcolo (aperto/chiuso, giorni raggruppati) sta in ../assets/comune.js; qui solo i testi.
   var dayFormatters = {};
-
-  /**
-   * Giorno della settimana a Roma: 0 = lunedì … 6 = domenica (fallback: giorno locale).
-   * SOLO PER DEBUG: `?giorno=1..7` nell'URL forza il giorno, 1 = lunedì (ignorato se malformato).
-   */
-  function currentDay() {
-    try {
-      var forced = new URLSearchParams(location.search).get("giorno");
-      if (forced && /^[1-7]$/.test(forced)) return parseInt(forced, 10) - 1;
-    } catch (e) { /* URLSearchParams assente */ }
-    try {
-      var name = new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Rome", weekday: "short" }).format(new Date());
-      var idx = DAY_KEYS.indexOf(name);
-      if (idx !== -1) return idx;
-    } catch (e) { /* Intl/timeZone non supportati: giorno locale */ }
-    return (new Date().getDay() + 6) % 7;
-  }
 
   /** Orari validi (array di 7) o null: senza, pill e orari del footer non compaiono. */
   function weekHours() {
-    var h = MENU && MENU.meta && MENU.meta.hours;
-    return Array.isArray(h) && h.length === 7 ? h : null;
-  }
-
-  /** true se la chiusura cade dopo mezzanotte (close <= open). */
-  function pastMidnight(slot) {
-    return minutes(slot.close) <= minutes(slot.open);
+    return COMUNE.validHours(MENU && MENU.meta && MENU.meta.hours);
   }
 
   /** Nome del giorno i (0 = lunedì) nella lingua corrente. style: "long" | "short". Prima lettera maiuscola. */
@@ -230,46 +174,21 @@
     return name.charAt(0).toUpperCase() + name.slice(1);
   }
 
-  /** Orario da mostrare: la chiusura "00:00" diventa "24:00", il resto invariato. */
-  function shownTime(hhmm, isClose) {
-    return isClose && hhmm === "00:00" ? "24:00" : hhmm;
-  }
-
   /** Sostituisce {t} e {d} nella stringa di interfaccia `key`. */
   function fmt(key, time, day) {
     return t(key).replace("{t}", time).replace("{d}", day || "");
   }
 
-  /**
-   * Stato attuale: { open: bool, text } oppure null se non ci sono orari.
-   * Aperto anche nella "coda" di ieri se ieri chiudeva dopo mezzanotte.
-   */
+  /** Stato attuale con il testo della pill: { open: bool, text } oppure null se non ci sono orari. */
   function openingStatus() {
-    var hours = weekHours();
-    if (!hours) return null;
-    var now = minutes(currentTime());
-    var d = currentDay();
-    var today = hours[d];
-    var yesterday = hours[(d + 6) % 7];
-
-    if (today && now >= minutes(today.open) && (pastMidnight(today) || now < minutes(today.close))) {
-      return { open: true, text: t("openNow") + " · " + fmt("closesAt", shownTime(today.close, true)) };
-    }
-    if (yesterday && pastMidnight(yesterday) && now < minutes(yesterday.close)) {
-      return { open: true, text: t("openNow") + " · " + fmt("closesAt", shownTime(yesterday.close, true)) };
-    }
+    var st = COMUNE.openingStatus(weekHours());
+    if (!st) return null;
+    if (st.open) return { open: true, text: t("openNow") + " · " + fmt("closesAt", shownTime(st.closes, true)) };
     var closed = t("closedNow") + " · ";
-    if (today && now < minutes(today.open)) {
-      return { open: false, text: closed + fmt("opensAt", shownTime(today.open, false)) };
-    }
-    for (var n = 1; n <= 7; n++) {
-      var slot = hours[(d + n) % 7];
-      if (!slot) continue;
-      var time = shownTime(slot.open, false);
-      if (n === 1) return { open: false, text: closed + fmt("opensTomorrow", time) };
-      return { open: false, text: closed + fmt("opensOn", time, dayName((d + n) % 7, "long").toLowerCase()) };
-    }
-    return null;
+    var time = shownTime(st.opens, false);
+    if (st.inDays === 0) return { open: false, text: closed + fmt("opensAt", time) };
+    if (st.inDays === 1) return { open: false, text: closed + fmt("opensTomorrow", time) };
+    return { open: false, text: closed + fmt("opensOn", time, dayName(st.day, "long").toLowerCase()) };
   }
 
   // ---------------------------------------------------------------- Guard
@@ -1905,23 +1824,15 @@
 
   /** Elenco orari (dl): giorni consecutivi con orari identici raggruppati ("Mar–Mer 07:30–23:00"); null senza orari. */
   function buildHoursList() {
-    var hours = weekHours();
-    if (!hours) return null;
-    var today = currentDay();
-    var rows = [];
-    var start = 0;
-    while (start < 7) {
-      var end = start;
-      while (end + 1 < 7 && slotText(hours[end + 1]) === slotText(hours[start])) end++;
-      var label = start === end ? dayName(start, "short") : dayName(start, "short") + "–" + dayName(end, "short");
-      var isToday = today >= start && today <= end;
-      rows.push(el("div", { class: isToday ? "hours__row hours__row--today" : "hours__row", "aria-current": isToday ? "date" : null }, [
+    var groups = COMUNE.hoursGroups(weekHours());
+    if (!groups) return null;
+    return el("dl", { class: "hours__list" }, groups.map(function (g) {
+      var label = g.from === g.to ? dayName(g.from, "short") : dayName(g.from, "short") + "–" + dayName(g.to, "short");
+      return el("div", { class: g.today ? "hours__row hours__row--today" : "hours__row", "aria-current": g.today ? "date" : null }, [
         el("dt", { text: label }),
-        el("dd", { text: slotText(hours[start]) })
-      ]));
-      start = end + 1;
-    }
-    return el("dl", { class: "hours__list" }, rows);
+        el("dd", { text: slotText(g.slot) })
+      ]);
+    }));
   }
 
   /** Orari nel footer. */

@@ -64,7 +64,7 @@ window.BIVIO_LOCALE = Object.freeze({
       email: "privacy@example.com",  // FITTIZIA, DA SOSTITUIRE: contatto per le richieste sulla privacy
       host: "Cloudflare Pages – Cloudflare, Inc.",  // fornitore che ospita il sito (compare nell'informativa)
       analytics: false,  // true = Cloudflare Web Analytics è accesa (dal pannello Cloudflare): cambia la frase dell'informativa. Non accende le statistiche.
-      updated: "2026-10-09"  // data dell'informativa (AAAA-MM-GG): aggiornala quando cambi i dati o il testo
+      updated: "2026-10-15"  // data dell'informativa (AAAA-MM-GG): aggiornala quando cambi i dati o il testo
     },
     links: {
       maps: "https://maps.app.goo.gl/19F1xGau4LCWjnEJA",
@@ -83,8 +83,8 @@ window.BIVIO_LOCALE = Object.freeze({
       ] },
       { h: "Quali dati trattiamo", p: [
         {
-          noAnalytics: "Questo sito serve solo a consultare il menu. Non ha moduli, registrazioni, statistiche né pubblicità, e non usa cookie.",
-          analytics: "Questo sito serve solo a consultare il menu. Non ha moduli, registrazioni né pubblicità, e non usa cookie. Raccogliamo solo statistiche aggregate e anonime sulle visite (pagine viste, provenienza, tipo di dispositivo) con Cloudflare Web Analytics, che non usa cookie e non ti identifica."
+          noAnalytics: "Questo sito serve a consultare il menu e a conoscere il locale. Non ha moduli, registrazioni, statistiche né pubblicità, e non usa cookie.",
+          analytics: "Questo sito serve a consultare il menu e a conoscere il locale. Non ha moduli, registrazioni né pubblicità, e non usa cookie. Raccogliamo solo statistiche aggregate e anonime sulle visite (pagine viste, provenienza, tipo di dispositivo) con Cloudflare Web Analytics, che non usa cookie e non ti identifica."
         },
         "Come per ogni sito, il fornitore che lo ospita ({host}) registra nei propri log tecnici l'indirizzo IP e alcuni dati del browser di chi lo visita, per farlo funzionare e proteggerlo. Noi non usiamo questi dati per identificarti. La base giuridica è il legittimo interesse a far funzionare il sito in sicurezza (art. 6, par. 1, lett. f del GDPR)."
       ] },
@@ -108,8 +108,8 @@ window.BIVIO_LOCALE = Object.freeze({
       ] },
       { h: "What data we process", p: [
         {
-          noAnalytics: "This website only lets you browse the menu. It has no forms, sign-ups, analytics or advertising, and it uses no cookies.",
-          analytics: "This website only lets you browse the menu. It has no forms, sign-ups or advertising, and it uses no cookies. We only collect aggregate, anonymous visit statistics (pages viewed, referrer, device type) with Cloudflare Web Analytics, which uses no cookies and does not identify you."
+          noAnalytics: "This website lets you browse the menu and find out about the restaurant. It has no forms, sign-ups, analytics or advertising, and it uses no cookies.",
+          analytics: "This website lets you browse the menu and find out about the restaurant. It has no forms, sign-ups or advertising, and it uses no cookies. We only collect aggregate, anonymous visit statistics (pages viewed, referrer, device type) with Cloudflare Web Analytics, which uses no cookies and does not identify you."
         },
         "As with any website, the hosting provider ({host}) records the IP address and some browser data of visitors in its technical logs, in order to run and protect the site. We do not use this data to identify you. The legal basis is our legitimate interest in running the site securely (Art. 6(1)(f) GDPR)."
       ] },

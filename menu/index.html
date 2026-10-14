@@ -20,7 +20,7 @@
   <script>
     if (location.protocol !== "file:" && /\/menu$/.test(location.pathname)) location.replace(location.pathname + "/" + location.search + location.hash);
   </script>
-  <!-- CACHE: a ogni modifica di style.css, menu-data.js, script.js o ../assets/locale-dati.js cambia la versione ?v= (data AAAAMMGG),
+  <!-- CACHE: a ogni modifica di style.css, menu-data.js, script.js o dei file in ../assets/ (base.css, locale-dati.js, comune.js) cambia la versione ?v= (data AAAAMMGG),
        altrimenti i telefoni dei clienti possono mostrare il menu vecchio dalla cache. -->
   <!-- Sipario d'apertura: si vede a ogni apertura del sito, ma non quando la pagina viene ricaricata o ci si torna con
        avanti/indietro. Va deciso qui, prima del primo disegno della pagina, altrimenti lampeggerebbe a ogni ricarica.
@@ -36,11 +36,13 @@
       } catch (e) { /* browser senza Navigation Timing: il sipario si vede a ogni caricamento */ }
     })();
   </script>
-  <link rel="stylesheet" href="style.css?v=20261014">
+  <link rel="stylesheet" href="../assets/base.css?v=20261015">
+  <link rel="stylesheet" href="style.css?v=20261015">
   <!-- Script classici (no moduli): funziona anche da file:// — l'ordine conta -->
-  <script defer src="../assets/locale-dati.js?v=20261014"></script>
+  <script defer src="../assets/locale-dati.js?v=20261015"></script>
+  <script defer src="../assets/comune.js?v=20261015"></script>
   <script defer src="menu-data.js?v=20261014"></script>
-  <script defer src="script.js?v=20261014"></script>
+  <script defer src="script.js?v=20261015"></script>
 </head>
 <body>
   <a class="skip-link" href="#menu" data-i18n="skip">Vai al menu</a>
