@@ -18,9 +18,9 @@ REGOLA DEI NOMI
 FORMATO: JPG 4:3 (1200x900 o 800x600), sotto i 300 KB.
 
 AGGIUNGERE UN PIATTO NUOVO
-  1. In menu-data.js aggiungi il piatto in "dishes" con id univoco, category e
+  1. In menu/menu-data.js aggiungi il piatto in "dishes" con id univoco, category e
      image: null (e la traduzione en, se serve).
   2. Quando c'è la foto, salvala con lo stesso nome nella cartella della categoria
-     e imposta image: "assets/images/<categoria>/<id>.jpg" sul piatto in menu-data.js
+     e imposta image: "../assets/images/<categoria>/<id>.jpg" sul piatto in menu/menu-data.js
      (oggi è null = nessuna foto).
   Con image: null il piatto è mostrato senza foto.
