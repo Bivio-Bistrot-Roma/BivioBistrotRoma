@@ -1,0 +1,100 @@
+/* ==========================================================================
+   Bivio Bistrot — galleria a tutto schermo (lightbox), in comune
+   Va con assets/galleria.js. Usa i token di assets/base.css (--radius, --ease).
+   ========================================================================== */
+
+.lightbox {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0; /* il padding sta su .lightbox__inner */
+  border: 0;
+  background: rgba(20, 16, 14, .94);
+  color: #f5ede0;
+  overflow: hidden;
+}
+.lightbox::backdrop { background: rgba(20, 16, 14, .94); }
+.lightbox[open] { animation: galleria-entra .3s var(--ease) both; }
+.lightbox__inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 56px 16px 24px;
+  touch-action: pan-y;
+}
+.lightbox__figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .9rem;
+  margin: 0;
+  max-width: 100%;
+}
+.lightbox__img {
+  max-width: 92vw;
+  max-height: 80vh;
+  max-height: 80dvh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--radius);
+  transition: opacity .3s var(--ease);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.lightbox__img.is-loading { opacity: 0; }
+.lightbox__caption {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  justify-content: center;
+  font-size: .75rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.lightbox__count { color: rgba(245, 237, 224, .6); font-variant-numeric: tabular-nums; }
+
+.lightbox__btn {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #f5ede0;
+  transition: background-color .2s var(--ease);
+}
+.lightbox__btn:hover { background: rgba(245, 237, 224, .14); }
+.lightbox__btn:focus-visible { outline-color: #f5ede0; }
+.lightbox__close { top: max(8px, env(safe-area-inset-top, 0px)); right: 8px; }
+.lightbox__prev,
+.lightbox__next { top: 50%; margin-top: -22px; }
+.lightbox__prev { left: 8px; }
+.lightbox__next { right: 8px; }
+@media (max-width: 599.98px) {
+  /* Su telefono si naviga con lo swipe; le frecce restano ma discrete */
+  .lightbox__prev, .lightbox__next { top: auto; bottom: 12px; margin-top: 0; }
+  .lightbox__inner { padding-bottom: 72px; }
+}
+
+@keyframes galleria-entra { from { opacity: 0; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox[open] { animation: none; }
+  .lightbox__img { transition: none; }
+}
+
+@media print {
+  .lightbox { display: none !important; }
+}

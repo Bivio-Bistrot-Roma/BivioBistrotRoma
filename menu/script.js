@@ -557,29 +557,9 @@
   }
 
   // ---------------------------------------------------------------- Dati legali + pop-up privacy
-  /**
-   * Dati legali { company, vat, seat, rea, capital, email, host, updated } oppure null ("in attesa": niente riga legale né informativa).
-   * Servono company, vat ed email compilati; `seat` vuoto = meta.address.
-   * SOLO PER DEBUG: `?anteprima=legale` nell'URL mostra comunque i dati, con "[da completare]" al posto di quelli mancanti.
-   */
+  /** Dati legali oppure null ("in attesa"): il calcolo sta in ../assets/comune.js. Debug: `?anteprima=legale`. */
   function legalData() {
-    var meta = (MENU && MENU.meta) || {};
-    var legal = meta.legal || {};
-    function pulisci(v) { return typeof v === "string" ? v.replace(/^\s+|\s+$/g, "") : ""; }
-    var company = pulisci(legal.company), vat = pulisci(legal.vat), email = pulisci(legal.email);
-    var seat = pulisci(legal.seat) || pulisci(meta.address);
-    var host = pulisci(legal.host), updated = pulisci(legal.updated);
-    // Facoltativi, solo nell'informativa: numero REA e capitale sociale versato (euro)
-    var rea = pulisci(legal.rea);
-    var capital = typeof legal.capital === "number" && legal.capital > 0 ? legal.capital : null;
-    if (company && vat && email) {
-      return { company: company, vat: vat, seat: seat, rea: rea, capital: capital, email: email, host: host, updated: updated, analytics: legal.analytics === true };
-    }
-    var anteprima = false;
-    try { anteprima = new URLSearchParams(location.search).get("anteprima") === "legale"; } catch (e) { /* URLSearchParams assente */ }
-    if (!anteprima) return null;
-    var mancante = "[" + t("legalPending") + "]";
-    return { company: company || mancante, vat: vat || mancante, seat: seat || mancante, rea: rea, capital: capital, email: email || mancante, host: host || mancante, updated: updated, analytics: legal.analytics === true };
+    return COMUNE.legalData(MENU && MENU.meta, t("legalPending"));
   }
 
   /** Riga legale nel footer ("Ragione sociale · P. IVA … · Privacy"); nascosta e vuota se i dati sono in attesa. */
@@ -612,25 +592,6 @@
     } catch (e) { return s; }
   }
 
-  /**
-   * Sostituisce i segnaposto {company} {vat} {seat} {rea} {capital} {email} {host} in `text` (solo testo, niente HTML).
-   * Restituisce "" se il testo usa un dato facoltativo ({rea}, {capital}) che non è compilato: quel paragrafo va saltato.
-   */
-  function fillLegal(text, data) {
-    var valori = {
-      company: data.company, vat: data.vat, seat: data.seat, email: data.email, host: data.host,
-      rea: data.rea, capital: data.capital ? formatPrice(data.capital) : ""
-    };
-    var manca = false;
-    Object.keys(valori).forEach(function (k) {
-      var segnaposto = "{" + k + "}";
-      if (text.indexOf(segnaposto) === -1) return;
-      if (!valori[k]) manca = true;
-      text = text.split(segnaposto).join(valori[k]);
-    });
-    return manca ? "" : text;
-  }
-
   /** Ricostruisce il contenuto del pop-up privacy nella lingua corrente. */
   function renderPrivacyModal() {
     var panel = privacyModalEl && privacyModalEl.querySelector(".privacy-modal__panel");
@@ -643,15 +604,10 @@
     panel.appendChild(closeBtn);
     panel.appendChild(el("h2", { class: "privacy-modal__title", id: "privacy-modal-title", text: t("privacyTitle") }));
 
-    var testi = (MENU.privacy && (MENU.privacy[lang] || MENU.privacy.it)) || [];
-    testi.forEach(function (sezione) {
-      panel.appendChild(el("h3", { class: "privacy-modal__h", text: fillLegal(sezione.h, data) }));
-      (sezione.p || []).forEach(function (par) {
-        // Paragrafo a due versioni: dipende da meta.legal.analytics (statistiche Cloudflare accese o no)
-        if (typeof par !== "string") par = (data.analytics ? par.analytics : par.noAnalytics) || "";
-        var testo = fillLegal(par, data);
-        if (testo) panel.appendChild(el("p", { text: testo }));
-      });
+    // Testo pronto (segnaposto sostituiti, paragrafi da saltare già tolti): ../assets/comune.js
+    COMUNE.privacySections(MENU.privacy, lang, data, formatPrice).forEach(function (sezione) {
+      panel.appendChild(el("h3", { class: "privacy-modal__h", text: sezione.h }));
+      sezione.p.forEach(function (testo) { panel.appendChild(el("p", { text: testo })); });
     });
 
     if (data.updated) {
@@ -1580,155 +1536,6 @@
     });
   }
 
-  // ---------------------------------------------------------------- Galleria "Il locale" + lightbox
-  var galleryPillEl = document.querySelector(".pill-link--gallery");
-  var lightboxEl = document.querySelector(".lightbox");
-  var lbState = { index: 0, open: false };
-  var lbReady = false;
-  var lbOpener = null; // elemento che ha aperto la lightbox: riceve il focus alla chiusura
-
-  function galleryItems() {
-    return (MENU.gallery && MENU.gallery.length) ? MENU.gallery : [];
-  }
-
-  /**
-   * Sceglie la versione della foto per la lightbox: -800 (srcSmall) se basta ai pixel fisici
-   * che il riquadro (92vw x 80vh, come .lightbox__img) può mostrare, altrimenti -1600 (src).
-   */
-  function photoSrc(g) {
-    if (!g.width || !g.height) return g.src;
-    var boxW = window.innerWidth * 0.92;
-    var boxH = window.innerHeight * 0.80;
-    var s = Math.min(boxW / g.width, boxH / g.height, 1);
-    var needed = s * Math.max(g.width, g.height) * (window.devicePixelRatio || 1);
-    return (g.srcSmall && needed <= 800) ? g.srcSmall : g.src;
-  }
-
-  /** Aggiorna la pillola "Il locale" (nascosta se non ci sono foto) e la lightbox aperta al cambio lingua. */
-  function syncGallery() {
-    if (galleryPillEl) galleryPillEl.hidden = !galleryItems().length;
-    if (lbState.open) showPhoto(lbState.index, true); // cambio lingua con lightbox aperta
-  }
-
-  /** Pillola: click apre la prima foto; la prima foto grande viene precaricata una sola volta. */
-  function setupGalleryPill() {
-    if (!galleryPillEl) return;
-    var preloaded = false;
-    function preload() {
-      if (preloaded) return;
-      var items = galleryItems();
-      if (!items.length) return;
-      preloaded = true;
-      new Image().src = photoSrc(items[0]);
-    }
-    galleryPillEl.addEventListener("pointerenter", preload);
-    galleryPillEl.addEventListener("focus", preload);
-    galleryPillEl.addEventListener("click", function () {
-      if (galleryItems().length) openLightbox(0);
-    });
-  }
-
-  /** Mostra la foto i nella lightbox (ciclico). instant = senza dissolvenza. */
-  function showPhoto(i, instant) {
-    var items = galleryItems();
-    if (!items.length || !lightboxEl) return;
-    var n = items.length;
-    lbState.index = ((i % n) + n) % n;
-    var g = items[lbState.index];
-    var img = lightboxEl.querySelector(".lightbox__img");
-    var caption = tr(g, "caption") || "";
-    lightboxEl.querySelector(".lightbox__text").textContent = caption;
-    lightboxEl.querySelector(".lightbox__count").textContent = (lbState.index + 1) + " / " + n;
-    img.alt = tr(g, "alt") || caption;
-    var wanted = photoSrc(g);
-    if (img.getAttribute("src") !== wanted) {
-      if (!instant) img.classList.add("is-loading");
-      img.onload = img.onerror = function () { img.classList.remove("is-loading"); };
-      img.src = wanted;
-      if (img.complete) img.classList.remove("is-loading");
-    }
-    // Precarica le vicine per una navigazione fluida
-    [1, -1].forEach(function (d) {
-      var nb = items[(lbState.index + d + n) % n];
-      if (nb) new Image().src = photoSrc(nb);
-    });
-  }
-
-  function openLightbox(i) {
-    if (!lightboxEl) return;
-    var items = galleryItems();
-    if (typeof lightboxEl.showModal !== "function") {
-      // Fallback: nessun <dialog> -> la foto si apre in una nuova scheda
-      window.open(items[i].src, "_blank", "noopener");
-      return;
-    }
-    setupLightbox();
-    lbOpener = document.activeElement;
-    lbState.index = i;
-    lbState.open = true;
-    lightboxEl.querySelector(".lightbox__img").removeAttribute("src");
-    document.documentElement.classList.add("is-modal-open");
-    try { lightboxEl.showModal(); } catch (e) {
-      lbState.open = false;
-      document.documentElement.classList.remove("is-modal-open");
-      window.open(items[i].src, "_blank", "noopener");
-      return;
-    }
-    showPhoto(i, true);
-    lightboxEl.querySelector(".lightbox__close").focus({ preventScroll: true });
-  }
-
-  /** Listener della lightbox: registrati una sola volta, alla prima apertura. */
-  function setupLightbox() {
-    if (lbReady) return;
-    lbReady = true;
-    var root = document.documentElement;
-    lightboxEl.querySelector(".lightbox__close").addEventListener("click", function () { lightboxEl.close(); });
-    lightboxEl.querySelector(".lightbox__prev").addEventListener("click", function () { showPhoto(lbState.index - 1); });
-    lightboxEl.querySelector(".lightbox__next").addEventListener("click", function () { showPhoto(lbState.index + 1); });
-
-    // Alla chiusura (Esc, X o backdrop): sblocca lo scroll e riporta il focus all'elemento che ha aperto
-    lightboxEl.addEventListener("close", function () {
-      lbState.open = false;
-      root.classList.remove("is-modal-open");
-      if (lbOpener && document.contains(lbOpener) && typeof lbOpener.focus === "function") {
-        lbOpener.focus({ preventScroll: true });
-      }
-      lbOpener = null;
-    });
-
-    lightboxEl.addEventListener("keydown", function (e) {
-      if (e.key === "ArrowLeft") { e.preventDefault(); showPhoto(lbState.index - 1); }
-      else if (e.key === "ArrowRight") { e.preventDefault(); showPhoto(lbState.index + 1); }
-    });
-
-    // Swipe orizzontale (touch/penna); soglia 40px, prevale l'asse orizzontale
-    var startX = null, startY = 0, swiped = false;
-    lightboxEl.addEventListener("pointerdown", function (e) {
-      if (e.pointerType === "mouse") return;
-      startX = e.clientX; startY = e.clientY; swiped = false;
-    });
-    lightboxEl.addEventListener("pointerup", function (e) {
-      if (startX === null) return;
-      var dx = e.clientX - startX, dy = e.clientY - startY;
-      startX = null;
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
-        swiped = true;
-        showPhoto(lbState.index + (dx < 0 ? 1 : -1));
-      }
-    });
-    lightboxEl.addEventListener("pointercancel", function () { startX = null; });
-
-    // Click sullo sfondo (fuori da foto, didascalia e bottoni) chiude
-    lightboxEl.addEventListener("click", function (e) {
-      if (swiped) { swiped = false; return; }
-      if (e.target.closest("button, .lightbox__img, .lightbox__caption")) return;
-      lightboxEl.close();
-    });
-  }
-
-  setupGalleryPill();
-
   // ---------------------------------------------------------------- Hash + avvio
   function syncFromHash(initial) {
     var parsed = parseHash();
@@ -1916,7 +1723,6 @@
       } catch (e) { /* non critico */ }
     }
     applyStaticText();
-    syncGallery();
     if (allergenState.open) renderAllergenModal(allergenState.dish); // cambio lingua con pop-up allergeni aperto
     if (privacyState.open) renderPrivacyModal(); // idem per il pop-up privacy
     if (opts.initial || !changed) return;

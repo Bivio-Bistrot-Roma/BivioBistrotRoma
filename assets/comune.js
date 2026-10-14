@@ -7,6 +7,9 @@
  *
  * ORARI (dati in BIVIO_LOCALE.meta.hours: 7 voci lun -> dom, null = chiuso, close <= open = chiude dopo mezzanotte)
  *  Ora e giorno sono quelli di Roma. SOLO PER DEBUG: `?ora=HH:MM` e `?giorno=1..7` (1 = lunedì) nell'URL li forzano.
+ *
+ * DATI LEGALI E PRIVACY (dati in BIVIO_LOCALE.meta.legal e BIVIO_LOCALE.privacy)
+ *  legalData() decide se mostrare riga legale e informativa; privacySections() dà il testo pronto. Il pop-up lo disegna ogni sito.
  */
 (function () {
   "use strict";
@@ -130,7 +133,77 @@
     return groups;
   }
 
+  // ---------------------------------------------------------------- Dati legali e informativa privacy
+  function pulisci(v) { return typeof v === "string" ? v.replace(/^\s+|\s+$/g, "") : ""; }
+
+  /**
+   * Dati legali { company, vat, seat, rea, capital, email, host, updated, analytics } presi da `meta`
+   * (BIVIO_LOCALE.meta), oppure null ("in attesa": niente riga legale né informativa).
+   * Servono company, vat ed email compilati; `seat` vuoto = meta.address.
+   * SOLO PER DEBUG: `?anteprima=legale` nell'URL mostra comunque i dati, con "[mancante]" al posto di quelli
+   * mancanti (`mancante` è il testo già tradotto, es. "da completare").
+   */
+  function legalData(meta, mancante) {
+    meta = meta || {};
+    var legal = meta.legal || {};
+    var company = pulisci(legal.company), vat = pulisci(legal.vat), email = pulisci(legal.email);
+    var seat = pulisci(legal.seat) || pulisci(meta.address);
+    var host = pulisci(legal.host), updated = pulisci(legal.updated);
+    // Facoltativi, solo nell'informativa: numero REA e capitale sociale versato (euro)
+    var rea = pulisci(legal.rea);
+    var capital = typeof legal.capital === "number" && legal.capital > 0 ? legal.capital : null;
+    if (company && vat && email) {
+      return { company: company, vat: vat, seat: seat, rea: rea, capital: capital, email: email, host: host, updated: updated, analytics: legal.analytics === true };
+    }
+    var anteprima = false;
+    try { anteprima = new URLSearchParams(location.search).get("anteprima") === "legale"; } catch (e) { /* URLSearchParams assente */ }
+    if (!anteprima) return null;
+    var segno = "[" + mancante + "]";
+    return { company: company || segno, vat: vat || segno, seat: seat || segno, rea: rea, capital: capital, email: email || segno, host: host || segno, updated: updated, analytics: legal.analytics === true };
+  }
+
+  /**
+   * Sostituisce i segnaposto {company} {vat} {seat} {rea} {capital} {email} {host} in `text` (solo testo, niente HTML).
+   * `formatCapital(n)` scrive il capitale nella lingua del sito (es. "1.000,00 €").
+   * Restituisce "" se il testo usa un dato facoltativo ({rea}, {capital}) che non è compilato: quel paragrafo va saltato.
+   */
+  function fillLegal(text, data, formatCapital) {
+    var valori = {
+      company: data.company, vat: data.vat, seat: data.seat, email: data.email, host: data.host,
+      rea: data.rea, capital: data.capital ? formatCapital(data.capital) : ""
+    };
+    var manca = false;
+    Object.keys(valori).forEach(function (k) {
+      var segnaposto = "{" + k + "}";
+      if (text.indexOf(segnaposto) === -1) return;
+      if (!valori[k]) manca = true;
+      text = text.split(segnaposto).join(valori[k]);
+    });
+    return manca ? "" : text;
+  }
+
+  /**
+   * Testo dell'informativa pronto da mostrare: [{ h: titolo, p: [paragrafo, …] }, …] nella lingua `lang`
+   * (ripiego: italiano). Segnaposto sostituiti, paragrafi con dati facoltativi mancanti saltati; i paragrafi
+   * a due versioni { noAnalytics, analytics } seguono data.analytics.
+   */
+  function privacySections(privacy, lang, data, formatCapital) {
+    var testi = (privacy && (privacy[lang] || privacy.it)) || [];
+    return testi.map(function (sezione) {
+      var paragrafi = [];
+      (sezione.p || []).forEach(function (par) {
+        if (typeof par !== "string") par = (data.analytics ? par.analytics : par.noAnalytics) || "";
+        var testo = fillLegal(par, data, formatCapital);
+        if (testo) paragrafi.push(testo);
+      });
+      return { h: fillLegal(sezione.h, data, formatCapital), p: paragrafi };
+    });
+  }
+
   window.BIVIO_COMUNE = Object.freeze({
+    legalData: legalData,
+    fillLegal: fillLegal,
+    privacySections: privacySections,
     minutes: minutes,
     inWindow: inWindow,
     currentTime: currentTime,

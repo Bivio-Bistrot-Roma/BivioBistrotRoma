@@ -10,6 +10,7 @@
  * STRUTTURA
  *  - meta    : dati generali (nome, città, valuta, lingue, orari `hours`, indirizzo, telefono, `legal`, `links`).
  *  - privacy : testo dell'informativa per lingua.
+ *  - gallery : foto del locale per la galleria del sito del locale (istruzioni sopra l'elenco).
  *
  * ORARI
  *  meta.hours: 7 elementi, da lunedì (indice 0) a domenica (indice 6). Ogni elemento è
@@ -124,5 +125,49 @@ window.BIVIO_LOCALE = Object.freeze({
         "You also have the right to lodge a complaint with the Italian Data Protection Authority (garanteprivacy.it)."
       ] }
     ]
-  }
+  },
+
+  // ------------------------------------------------------------------ FOTO DEL LOCALE (galleria del sito del locale)
+  // Percorsi dalla radice del sito (es. "assets/images/…"): chi li usa da una sottocartella aggiunge "../" (vedi assets/galleria.js, opzione `base`).
+  // COME AGGIUNGERE UNA FOTO: metti l'originale in assets/images/locale/{esterni,interni,dettagli}/,
+  // lancia `python tools/ottimizza-foto.py` (crea i derivati in locale/web/), poi aggiungi qui un oggetto:
+  // { id, src (-1600), srcSmall (-800), width, height (del -1600), alt, caption, en: { alt, caption } }.
+  // width/height (del -1600) servono a script.js per scegliere tra -800 e -1600 in base allo schermo. Ordine = ordine in pagina.
+  gallery: [
+    {
+      id: "esterni-terrazzino", src: "assets/images/locale/web/esterni-terrazzino-1600.jpg", srcSmall: "assets/images/locale/web/esterni-terrazzino-800.jpg",
+      width: 1200, height: 1600, alt: "Tavolo apparecchiato sul terrazzino tra le piante", caption: "Il terrazzino",
+      en: { alt: "Table set on the terrace among the plants", caption: "The terrace" }
+    },
+    {
+      id: "interni-cucina-a-vista-3", src: "assets/images/locale/web/interni-cucina-a-vista-3-1600.jpg", srcSmall: "assets/images/locale/web/interni-cucina-a-vista-3-800.jpg",
+      width: 1600, height: 1200, alt: "Bancone in mosaico davanti alla cucina a vista", caption: "La cucina a vista",
+      en: { alt: "Mosaic counter in front of the open kitchen", caption: "The open kitchen" }
+    },
+    {
+      id: "interni-tavolo-con-piatti", src: "assets/images/locale/web/interni-tavolo-con-piatti-1600.jpg", srcSmall: "assets/images/locale/web/interni-tavolo-con-piatti-800.jpg",
+      width: 1200, height: 1600, alt: "Due piatti di pasta al pomodoro su un tavolo apparecchiato", caption: "A tavola",
+      en: { alt: "Two plates of tomato pasta on a set table", caption: "At the table" }
+    },
+    {
+      id: "interni-cucina-a-vista-2", src: "assets/images/locale/web/interni-cucina-a-vista-2-1600.jpg", srcSmall: "assets/images/locale/web/interni-cucina-a-vista-2-800.jpg",
+      width: 1200, height: 1600, alt: "Sgabelli al bancone con la cucina alle spalle", caption: "Il bancone",
+      en: { alt: "Stools at the counter with the kitchen behind", caption: "The counter" }
+    },
+    {
+      id: "interni-tavoli-al-buio", src: "assets/images/locale/web/interni-tavoli-al-buio-1600.jpg", srcSmall: "assets/images/locale/web/interni-tavoli-al-buio-800.jpg",
+      width: 1200, height: 1600, alt: "Tavoli apparecchiati alla luce delle candele", caption: "La sera",
+      en: { alt: "Tables set by candlelight", caption: "In the evening" }
+    },
+    {
+      id: "interni-tavolo-con-piatto", src: "assets/images/locale/web/interni-tavolo-con-piatto-1600.jpg", srcSmall: "assets/images/locale/web/interni-tavolo-con-piatto-800.jpg",
+      width: 1200, height: 1600, alt: "Pasta al pomodoro con formaggio grattugiato", caption: "Dalla cucina",
+      en: { alt: "Tomato pasta with grated cheese", caption: "From the kitchen" }
+    },
+    {
+      id: "interni-cucina-a-vista", src: "assets/images/locale/web/interni-cucina-a-vista-1600.jpg", srcSmall: "assets/images/locale/web/interni-cucina-a-vista-800.jpg",
+      width: 1200, height: 1600, alt: "Piatto servito sul bancone davanti alla cucina", caption: "Al bancone",
+      en: { alt: "Dish served at the counter in front of the kitchen", caption: "At the counter" }
+    }
+  ]
 });
