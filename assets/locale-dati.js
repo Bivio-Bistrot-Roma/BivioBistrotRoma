@@ -69,7 +69,8 @@ window.BIVIO_LOCALE = Object.freeze({
     },
     links: {
       maps: "https://maps.app.goo.gl/19F1xGau4LCWjnEJA",
-      whatsapp: "https://wa.me/393780670878"  // es. "https://wa.me/39XXXXXXXXXX" (numero con prefisso, senza + né spazi)
+      whatsapp: "https://wa.me/393780670878",  // es. "https://wa.me/39XXXXXXXXXX" (numero con prefisso, senza + né spazi)
+      thefork: ""  // pagina di prenotazione TheFork (sito del locale). Vuoto = il pulsante TheFork non compare
     }
   },
 
