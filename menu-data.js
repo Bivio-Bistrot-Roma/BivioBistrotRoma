@@ -26,7 +26,7 @@
  *                 senza, vale fino a mezzanotte; se è minore o uguale di `firstFrom` la fascia prosegue
  *                 dopo mezzanotte (es. 11:00-04:00). Più categorie promosse restano nell'ordine in cui
  *                 sono dichiarate. Solo per debug: `?ora=HH:MM` nell'URL forza l'ora (ignorato se malformato).
- *  - dishes     : piatti   -> { id, name, description, price (null = nessun prezzo mostrato), allergens, frozen?, category, image (null = nessuna foto), placeholder }
+ *  - dishes     : piatti   -> { id, name, description, price (null = nessun prezzo mostrato), allergens, frozen?, favorite?, category, image (null = nessuna foto), placeholder }
  *  - allergens  : i 14 allergeni del regolamento UE 1169/2011 -> { id (1-14), name, en: { name } }
  *  - wines      : vini     -> { id, name, winery, detail, vintage, abv (numero, es. 12.5), organic, bottlePrice, glassPrice, category }
  *  - spirits    : distillati -> { id, name, kind, price, category }
@@ -44,6 +44,7 @@
  *    - "chef"                               = allergeni comunicati separatamente in base alla ricetta della Chef;
  *    - "ask"                                = (caffetteria) nota "chiedi al personale" sotto la voce.
  *  `frozen: true` = prodotto gelo: un asterisco dopo il nome rimanda alla nota sotto i piatti.
+ *  `favorite: true` = tra i piatti più graditi dai clienti: etichetta "Il più amato" sopra il nome (al massimo uno per categoria).
  *
  * COLLEGAMENTO INTERNO DI UNA VOCE (`link`, opzionale, righe a due prezzi)
  *  link: { section, category, label } -> sotto il nome compare un collegamento "label" (corsivo, sottolineato) che porta
@@ -158,7 +159,7 @@ window.BIVIO_MENU = Object.freeze({
       allergensAsk: "Allergeni: chiedi al personale",
       allergensHint: "Tocca i numeri di un piatto per vedere gli allergeni.",
       allergensContains: "{d} contiene:", allergensPresent: "presente in questo piatto",
-      frozenMark: "Prodotto gelo",
+      frozenMark: "Prodotto gelo", favorite: "Il più amato",
       seeSelection: "Vedi la selezione in Distillati",
       hoursTitle: "Orari", openNow: "Aperto", closedNow: "Chiuso",
       closesAt: "chiude alle {t}", opensAt: "apre alle {t}", opensTomorrow: "apre domani alle {t}",
@@ -186,7 +187,7 @@ window.BIVIO_MENU = Object.freeze({
       allergensAsk: "Allergens: please ask our staff",
       allergensHint: "Tap the numbers on a dish to see its allergens.",
       allergensContains: "{d} contains:", allergensPresent: "present in this dish",
-      frozenMark: "Frozen product",
+      frozenMark: "Frozen product", favorite: "Most loved",
       seeSelection: "see the selection in Spirits",
       hoursTitle: "Opening hours", openNow: "Open", closedNow: "Closed",
       closesAt: "closes at {t}", opensAt: "opens at {t}", opensTomorrow: "opens tomorrow {t}",
@@ -413,7 +414,7 @@ window.BIVIO_MENU = Object.freeze({
     {
       id: "gnocchetti-pistacchio", name: "Gnocchetti al pesto di pistacchio",
       description: "Pistacchio di Bronte, guanciale e granella di pistacchio",
-      price: 20, allergens: [1, 7, 8], category: "per-continuare", image: null,
+      price: 20, allergens: [1, 7, 8], favorite: true, category: "per-continuare", image: null,
       en: { name: "Gnocchetti with pistachio pesto", description: "Bronte pistachio, guanciale and crushed pistachios" },
       placeholder: null
     },
@@ -434,7 +435,7 @@ window.BIVIO_MENU = Object.freeze({
     // --- Per Finire
     {
       id: "tagliata-pollo", name: "Tagliata di pollo", description: "Glassata al miele, senape e limone",
-      price: 25, allergens: [10, 12], category: "per-finire", image: null,
+      price: 25, allergens: [10, 12], favorite: true, category: "per-finire", image: null,
       en: { name: "Sliced chicken", description: "Glazed with honey, mustard and lemon" },
       placeholder: null
     },

@@ -813,7 +813,11 @@
       nameEl,
       hasPrice ? el("data", { class: "dish__price", value: String(d.price), text: formatPrice(d.price) }) : null
     ]);
-    var body = el("div", { class: "dish__body" }, [head]);
+    var body = el("div", { class: "dish__body" }, [
+      // Tra i piatti più graditi: etichetta sopra il nome
+      d.favorite ? el("p", { class: "dish__badge", text: t("favorite") }) : null,
+      head
+    ]);
     var desc = tr(d, "description");
     if (desc) body.appendChild(el("p", { class: "dish__desc", text: desc }));
     var allergenLine = renderDishAllergens(d);
