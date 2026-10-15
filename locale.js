@@ -30,6 +30,7 @@
     "hero.frase": "Where roads meet and stories begin.",
     "hero.menu": "See the menu",
     "hero.prenota": "Book",
+    "hero.scorri": "Discover Bivio",
 
     "storia.titolo": "Bivio Bistrot",
     "storia.1": "Some names come about by chance; others hold a story. Bivio is both.",

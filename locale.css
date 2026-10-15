@@ -164,6 +164,88 @@ html.is-modal-open body { padding-right: var(--barra, 0px); }
   to { opacity: 1; transform: none; }
 }
 
+/* ---------- Invito a scorrere ---------- */
+/* In fondo alla foto: una parola piccola, una linea sottile in cui scende lentamente una goccia di luce (come cera da
+   una candela) e in fondo una punta di freccia che si abbassa quando la goccia arriva: «si scende di qui».
+   Compare dopo l'apertura (e dopo il sipario, se c'è). Su pc è più grande e piena. */
+.hero__scorri {
+  --scorri-op: .8;
+  --linea-h: 44px;  /* lunghezza della linea */
+  --goccia-h: 18px; /* lunghezza della goccia di luce */
+  position: absolute;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  color: var(--crema-testo);
+  font-size: .6875rem;
+  font-weight: 500;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, .6);
+  white-space: nowrap;
+  opacity: var(--scorri-op);
+  transition: opacity .2s var(--ease);
+}
+.hero__scorri span:first-child { padding-left: .28em; } /* compensa il letter-spacing per centrare otticamente */
+.hero__scorri:hover { opacity: 1; }
+.hero__goccia {
+  position: relative;
+  width: 1px;
+  height: var(--linea-h);
+  overflow: hidden;
+  background: rgba(245, 230, 204, .45);
+}
+.hero__goccia::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: var(--goccia-h);
+  background: linear-gradient(to bottom, transparent, #fff);
+  transform: translateY(calc(-1 * var(--goccia-h)));
+}
+/* Punta di freccia in fondo alla linea: un quadratino con due bordi, ruotato; la punta tocca la fine della linea */
+.hero__scorri::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  margin-top: -20px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+}
+@media (min-width: 900px) {
+  .hero__scorri { --scorri-op: 1; --linea-h: 56px; --goccia-h: 22px; bottom: 28px; gap: 12px; font-size: .8125rem; font-weight: 600; }
+  .hero__goccia, .hero__goccia::after { width: 1.5px; }
+  .hero__scorri::after { width: 11px; height: 11px; margin-top: -24px; border-width: 2px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero__scorri { animation: scorri-compare .8s var(--ease) 1s both; }
+  html:not(.senza-intro) .hero__scorri { animation-delay: 2.1s; }
+  /* Stessa durata e stesso ritardo: goccia e punta restano sincronizzate a ogni giro */
+  .hero__goccia::after { animation: goccia 2.4s linear 1.6s infinite; }
+  .hero__scorri::after { animation: punta 2.4s linear 1.6s infinite; }
+}
+@keyframes scorri-compare { from { opacity: 0; } to { opacity: var(--scorri-op); } }
+/* Al 60% la punta luminosa della goccia tocca la fine della linea: in quell'istante la freccia scatta in giù */
+@keyframes goccia {
+  0%   { transform: translateY(calc(-1 * var(--goccia-h))); animation-timing-function: cubic-bezier(.55, 0, .9, .6); }
+  60%  { transform: translateY(calc(var(--linea-h) - var(--goccia-h))); animation-timing-function: ease-out; }
+  75%, 100% { transform: translateY(var(--linea-h)); }
+}
+@keyframes punta {
+  0%, 60% { transform: rotate(45deg) translate(0, 0); animation-timing-function: ease-out; }
+  68%  { transform: rotate(45deg) translate(3px, 3px); animation-timing-function: ease-in-out; }
+  88%, 100% { transform: rotate(45deg) translate(0, 0); }
+}
+
 /* ---------- Sipario d'apertura ---------- */
 /* Gemello di quello del menu (menu/style.css), nella versione notte: stessi tempi, stessa curva, stesso giro del logo,
    stessa scopertura dal basso. Un velo color notte copre l'apertura; il logo vero parte dal centro dello schermo
@@ -684,7 +766,7 @@ html.is-modal-open body { padding-right: var(--barra, 0px); }
 
 /* ---------- Stampa ---------- */
 @media print {
-  .sipario, .hero__foto, .hero::before, .hero__barra, .hero__azioni, .skip-link, .locale, .prenota__azioni,
+  .sipario, .hero__scorri, .hero__foto, .hero::before, .hero__barra, .hero__azioni, .skip-link, .locale, .prenota__azioni,
   .persona__altro, .privacy, .modale-prenota, .to-top, .piede__privacy, .storia__foto, .cucina__foto { display: none !important; }
   .hero { min-height: 0; padding: 24px 0; background: none; color: var(--ink); }
   .hero__logo { filter: none; content: url("assets/brand/logo.png"); } /* il logo crema sul foglio bianco non si vedrebbe */
