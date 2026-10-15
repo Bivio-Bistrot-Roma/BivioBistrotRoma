@@ -13,7 +13,71 @@
   </script>
   <meta name="robots" content="noindex">
   <title data-i18n="meta.title">Bivio Bistrot — Roma</title>
-  <meta name="description" data-i18n-content="meta.description" content="Bistrot a Piazza Monte Grappa, Roma: cucina di stagione con radici siciliane, vini e cocktail.">
+  <meta name="description" data-i18n-content="meta.description" content="Bivio Bistrot, bistrot a Roma in Piazza Monte Grappa (Prati): cucina di stagione con radici siciliane, colazione al mattino, vini e cocktail fino a tardi.">
+  <!-- SEO: anteprime social (Open Graph, Twitter) e dati strutturati (JSON-LD) per i motori di ricerca.
+       AL LANCIO: sostituire DOMINIO-DA-DEFINIRE con il dominio vero (qui, nel canonical e nel JSON-LD). -->
+  <link rel="canonical" href="https://DOMINIO-DA-DEFINIRE/">
+  <meta property="og:type" content="restaurant">
+  <meta property="og:site_name" content="Bivio Bistrot">
+  <meta property="og:title" content="Bivio Bistrot — Roma">
+  <meta property="og:description" content="Bivio Bistrot, bistrot a Roma in Piazza Monte Grappa (Prati): cucina di stagione con radici siciliane, colazione al mattino, vini e cocktail fino a tardi.">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:locale:alternate" content="en_GB">
+  <meta property="og:url" content="https://DOMINIO-DA-DEFINIRE/">
+  <meta property="og:image" content="https://DOMINIO-DA-DEFINIRE/assets/brand/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Bivio Bistrot, bistrot a Roma in Piazza Monte Grappa">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Orari in openingHoursSpecification: ricavati da meta.hours in assets/locale-dati.js (aggiornare insieme).
+       Quando "closes" è minore di "opens" (es. venerdì 07:30-01:00) il locale chiude dopo mezzanotte,
+       il giorno dopo: schema.org lo accetta così. "00:00" = chiusura a mezzanotte. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Bivio Bistrot",
+    "url": "https://DOMINIO-DA-DEFINIRE/",
+    "image": [
+      "https://DOMINIO-DA-DEFINIRE/assets/brand/og-image.jpg",
+      "https://DOMINIO-DA-DEFINIRE/assets/images/locale/web/interni-tavoli-al-buio-1600.jpg",
+      "https://DOMINIO-DA-DEFINIRE/assets/images/locale/web/esterni-terrazzino-1600.jpg",
+      "https://DOMINIO-DA-DEFINIRE/assets/images/locale/web/interni-cucina-a-vista-1600.jpg"
+    ],
+    "logo": "https://DOMINIO-DA-DEFINIRE/assets/brand/logo.png",
+    "telephone": "+39 378 067 0878",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Piazza Monte Grappa, 1b",
+      "postalCode": "00195",
+      "addressLocality": "Roma",
+      "addressRegion": "RM",
+      "addressCountry": "IT"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 41.9145,
+      "longitude": 12.4645
+    },
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Monday", "opens": "07:30", "closes": "22:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Tuesday", "Wednesday"], "opens": "07:30", "closes": "23:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "07:30", "closes": "00:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "07:30", "closes": "01:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "11:30", "closes": "02:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "11:30", "closes": "22:00" }
+    ],
+    "servesCuisine": ["Italiana", "Siciliana"],
+    "priceRange": "€€",
+    "hasMenu": "https://DOMINIO-DA-DEFINIRE/menu/",
+    "acceptsReservations": true,
+    "potentialAction": {
+      "@type": "ReserveAction",
+      "target": "https://www.thefork.it/ristorante/bivio-bistrot-r870180"
+    },
+    "sameAs": ["https://www.thefork.it/ristorante/bivio-bistrot-r870180"]
+  }
+  </script>
   <meta name="theme-color" content="#1C1411">
   <link rel="icon" type="image/png" href="assets/brand/favicon.png">
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
@@ -29,7 +93,7 @@
   <script defer src="assets/comune.js?v=20261015b"></script>
   <script defer src="assets/galleria.js?v=20261015"></script>
   <script defer src="menu/menu-data.js?v=20261015b"></script>
-  <script defer src="locale.js?v=20261016e"></script>
+  <script defer src="locale.js?v=20261016f"></script>
 </head>
 <body>
   <a class="skip-link" href="#storia" data-i18n="skip">Vai ai contenuti</a>
