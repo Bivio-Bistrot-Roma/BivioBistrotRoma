@@ -1424,6 +1424,7 @@ a.titoli__voce:hover { color: var(--ink); }
 
 /* ---------- Footer ---------- */
 .site-footer {
+  position: relative; /* ancora per la strada del gatto */
   padding: 2.5rem var(--gutter) calc(2.5rem + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--line);
   text-align: center;
@@ -1471,6 +1472,103 @@ a.titoli__voce:hover { color: var(--ink); }
   margin-top: .35rem;
   font-size: .75rem;
   letter-spacing: .04em;
+}
+
+/* Easter egg (script.js: passaGatto): un gattino (mantello a caso, mai nero) cammina sulla riga in alto del footer. La strada è una fascia
+   appoggiata sulla riga, alta abbastanza per il gatto e il «prrr», con overflow nascosto: il gatto entra ed esce dai
+   bordi senza allargare la pagina; non intercetta i tocchi, solo il gatto sì. Toccato (gatto--fusa) si ferma, vibra
+   e fa «prrr». */
+.gatto-strada {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 60px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.gatto {
+  position: absolute;
+  bottom: 0;
+  left: -60px;
+  width: 48px;
+  height: 30px;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: gatto-cammina 9s linear both; /* durata ricalcolata da script.js sulla larghezza */
+}
+.gatto svg { display: block; overflow: visible; }
+.gatto--da-destra { animation-direction: reverse; }
+.gatto--da-destra svg { transform: scaleX(-1); }
+@keyframes gatto-cammina {
+  from { left: -60px; }
+  to   { left: 100%; }
+}
+.gatto__corpo { fill: currentColor; }
+.gatto__occhio { fill: var(--bg); }
+.gatto__macchia { fill: #D9822B; display: none; }
+.gatto__strisce { fill: none; stroke: #A95A1C; stroke-width: 1.3; stroke-linecap: round; display: none; }
+/* Mantelli (script.js: MANTELLI). Rosso tigrato, il gatto romano per eccellenza */
+.gatto--rosso { color: #D9822B; }
+.gatto--rosso .gatto__strisce { display: inline; }
+/* Bordeaux: il gatto della casa, del colore del logo */
+.gatto--bordeaux { color: var(--brand); }
+/* Bianco e rosso: sulla crema il bianco sparirebbe, quindi un contorno sottile attorno alla sagoma intera
+   (le ombre seguono il profilo dell'unione, senza righe dove testa e corpo si sovrappongono) */
+.gatto--pezzato { color: #FFFDF8; }
+.gatto--pezzato svg { filter: drop-shadow(0 0 .5px rgba(42, 18, 22, .75)) drop-shadow(0 0 .4px rgba(42, 18, 22, .5)); }
+.gatto--pezzato .gatto__macchia { display: inline; }
+.gatto--pezzato .gatto__coda { stroke: #D9822B; }
+.gatto--pezzato .gatto__occhio { fill: var(--ink); }
+.gatto__coda,
+.gatto__zampa {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  transform-box: fill-box;
+}
+.gatto__coda { stroke-width: 2.4; transform-origin: right bottom; animation: gatto-coda 1.2s ease-in-out infinite alternate; }
+.gatto__zampa { stroke-width: 2.6; transform-origin: 50% 0; animation: gatto-passo .36s ease-in-out infinite alternate; }
+.gatto__zampa--b { animation-delay: -.36s; } /* l'altra coppia è a metà passo */
+@keyframes gatto-passo {
+  from { transform: rotate(16deg); }
+  to   { transform: rotate(-16deg); }
+}
+@keyframes gatto-coda {
+  from { transform: rotate(-8deg); }
+  to   { transform: rotate(10deg); }
+}
+/* Fusa: si ferma (cammino e zampe in pausa) e il corpo trema appena */
+.gatto--fusa,
+.gatto--fusa .gatto__zampa { animation-play-state: paused; }
+.gatto--fusa .gatto__corpo { transform-box: fill-box; animation: gatto-fusa .06s linear infinite alternate; }
+@keyframes gatto-fusa {
+  from { transform: translate(-.4px, .2px); }
+  to   { transform: translate(.4px, -.2px); }
+}
+/* Dopo le fusa scappa: corsa che accelera (durata calcolata da script.js), zampe e coda molto più veloci */
+.gatto--scappa { transition-property: left; transition-timing-function: cubic-bezier(.5, 0, .9, .6); }
+.gatto--scappa .gatto__zampa { animation-duration: .1s; }
+.gatto--scappa .gatto__zampa--b { animation-delay: -.1s; }
+.gatto--scappa .gatto__coda { animation-duration: .25s; }
+/* Il «prrr» sale sopra la testa, dentro la parte alta della strada */
+.gatto__prrr {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: .95rem;
+  color: var(--muted);
+  white-space: nowrap;
+  pointer-events: none;
+  animation: gatto-prrr 1.6s ease-out both;
+}
+@keyframes gatto-prrr {
+  0%   { opacity: 0; transform: translate(-50%, 6px); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -14px); }
 }
 
 /* Orari nel footer: solo in stampa (a schermo bastano la pillola e il suo pannello, in alto). Griglia compatta centrata (giorni a destra, orari a sinistra) */
@@ -1734,7 +1832,7 @@ html.is-modal-open { overflow: hidden; }
 
 /* ---------- Stampa ---------- */
 @media print {
-  .sipario, .menu-nav, .to-top, .skip-link, .dish__media, .status-pill, .status-panel, .pager, .site-header__actions, .lang-menu, .lang-modal, .allergen-modal, .privacy-modal, .site-footer__privacy, .menu-notes__hint { display: none !important; }
+  .sipario, .gatto-strada, .menu-nav, .to-top, .skip-link, .dish__media, .status-pill, .status-panel, .pager, .site-header__actions, .lang-menu, .lang-modal, .allergen-modal, .privacy-modal, .site-footer__privacy, .menu-notes__hint { display: none !important; }
   body, .site-header { background: #fff; }
   .onda { display: none; }
   .site-header__logo { width: 200px; }

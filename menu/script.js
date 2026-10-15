@@ -1962,13 +1962,96 @@
     window.setTimeout(fine, 2300);
   }
 
+  // ---------------------------------------------------------------- Easter egg: il gatto di Roma
+  // Ogni tanto (una volta su cinque che il footer entra a schermo, al massimo una volta per visita) un gattino
+  // attraversa il footer camminando sulla sua riga in alto. Toccato, si ferma e fa le fusa, poi scappa via.
+  // Il mantello è scelto a caso tra quelli di MANTELLI (mai nero: porta sfortuna).
+  // Solo decorativo (aria-hidden); con il movimento ridotto non passa. ?gatto=1 (solo debug) lo fa passare sempre.
+  var footerEl = document.querySelector(".site-footer");
+  var gattoSempre = false;
+  try { gattoSempre = new URLSearchParams(location.search).get("gatto") === "1"; } catch (e) { /* URLSearchParams assente */ }
+  var gattoPassato = false;
+  var MANTELLI = ["rosso", "bordeaux", "pezzato"]; // classi gatto--<mantello> in style.css
+
+  /** Il gatto di profilo, rivolto a destra: coda, zampe (due coppie che si alternano), corpo, testa, orecchie, occhio. */
+  function disegnaGatto() {
+    var corpo = svg("g", { class: "gatto__corpo" });
+    corpo.appendChild(svg("path", { class: "gatto__coda", d: "M11 15C5 14 3 8 6 3" }));
+    [[12, "b"], [15, "a"], [28, "b"], [31, "a"]].forEach(function (z) {
+      corpo.appendChild(svg("line", { class: "gatto__zampa gatto__zampa--" + z[1], x1: z[0], y1: 18, x2: z[0], y2: 28.5 }));
+    });
+    corpo.appendChild(svg("ellipse", { cx: 21, cy: 16, rx: 12, ry: 6 }));
+    corpo.appendChild(svg("circle", { cx: 36, cy: 11, r: 5.5 }));
+    corpo.appendChild(svg("polygon", { points: "31.5,8 32.5,2 36,6" }));
+    corpo.appendChild(svg("polygon", { points: "36.5,6 40,2 40.8,8.5" }));
+    // Macchie (solo il bianco e rosso) e strisce (solo il rosso tigrato): le mostra o nasconde style.css secondo il mantello
+    corpo.appendChild(svg("ellipse", { class: "gatto__macchia", cx: 18, cy: 14, rx: 5.5, ry: 3.5 }));
+    corpo.appendChild(svg("circle", { class: "gatto__macchia", cx: 35, cy: 9, r: 3 }));
+    corpo.appendChild(svg("polygon", { class: "gatto__macchia", points: "36.5,6 40,2 40.8,8.5" }));
+    corpo.appendChild(svg("path", { class: "gatto__strisce", d: "M17 10.6q1 2.4 0 4.2M21 10.1q1 2.5 0 4.6M25 10.6q1 2.4 0 4.2M35.4 6.2l.3 2.2" }));
+    corpo.appendChild(svg("circle", { class: "gatto__occhio", cx: 38.3, cy: 10, r: 0.9 }));
+    var disegno = svg("svg", { viewBox: "0 0 48 30", width: 48, height: 30, focusable: "false" });
+    disegno.appendChild(corpo);
+    return disegno;
+  }
+
+  function passaGatto() {
+    if (!footerEl || footerEl.querySelector(".gatto-strada")) return;
+    var mantello = MANTELLI[Math.floor(Math.random() * MANTELLI.length)];
+    var gatto = el("div", { class: "gatto gatto--" + mantello + (Math.random() < 0.5 ? " gatto--da-destra" : "") }, [disegnaGatto()]);
+    var strada = el("div", { class: "gatto-strada", "aria-hidden": "true" }, [gatto]);
+    // Passo costante: su uno schermo largo ci mette di più, non corre
+    gatto.style.animationDuration = Math.round((footerEl.clientWidth + 120) / 55 * 10) / 10 + "s";
+    gatto.addEventListener("animationend", function (e) {
+      if (e.animationName === "gatto-cammina" && strada.parentNode) strada.parentNode.removeChild(strada);
+    });
+    // Toccato: si ferma, vibra e fa «prrr», poi scappa via di corsa dalla parte verso cui guarda
+    gatto.addEventListener("click", function () {
+      if (gatto.classList.contains("gatto--fusa") || gatto.classList.contains("gatto--scappa")) return;
+      var fusa = el("span", { class: "gatto__prrr", text: "prrr" });
+      gatto.appendChild(fusa);
+      gatto.classList.add("gatto--fusa");
+      window.setTimeout(function () {
+        if (fusa.parentNode) fusa.parentNode.removeChild(fusa);
+        // Il cammino si ferma dov'è (left fissato a mano) e da lì parte la corsa, una transizione su left
+        var x = gatto.offsetLeft;
+        var versoSinistra = gatto.classList.contains("gatto--da-destra");
+        var distanza = versoSinistra ? x + 60 : strada.clientWidth - x;
+        gatto.style.animation = "none";
+        gatto.style.left = x + "px";
+        gatto.classList.remove("gatto--fusa");
+        gatto.classList.add("gatto--scappa");
+        gatto.style.transitionDuration = Math.max(0.4, distanza / 700) + "s";
+        void gatto.offsetWidth;
+        gatto.style.left = versoSinistra ? "-60px" : "100%";
+        window.setTimeout(function () {
+          if (strada.parentNode) strada.parentNode.removeChild(strada);
+        }, Math.max(400, distanza / 0.7) + 100);
+      }, 1600);
+    });
+    footerEl.appendChild(strada);
+  }
+
+  function avviaGatto() {
+    if (!footerEl || !("IntersectionObserver" in window)) return;
+    new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting || reducedMotion.matches) return;
+      if (!gattoSempre && (gattoPassato || Math.random() > 0.2)) return;
+      gattoPassato = true;
+      window.setTimeout(passaGatto, 500);
+    }, { threshold: 0.5 }).observe(footerEl);
+  }
+
   lang = detectLanguage();
   setLanguage(lang, { initial: true });
   renderTabs();
   syncFromHash(true);
   syncPrivacyFromHash(); // #privacy all'avvio
   // Primo accesso: modale lingua dopo il rendering del menu e dopo il sipario (il <dialog> gli passerebbe sopra)
-  dopoSipario(function () { if (!hasExplicitLanguage()) openLanguageModal(); });
+  dopoSipario(function () {
+    if (!hasExplicitLanguage()) openLanguageModal();
+    avviaGatto();
+  });
   // Pill di stato e giorno evidenziato (pannello e footer) si aggiornano ogni minuto (senza ridisegnare il menu)
   window.setInterval(function () { renderStatus(); renderStatusPanel(); renderHours(); }, 60000);
 })();
