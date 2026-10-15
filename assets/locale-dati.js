@@ -62,7 +62,7 @@ window.BIVIO_LOCALE = Object.freeze({
       seat: "",      // sede legale; lascia vuoto se coincide con `address`
       rea: "RM-1791596",  // numero REA (ufficio del Registro Imprese + numero); vuoto = non compare
       capital: 1000,      // capitale sociale interamente versato, in euro; null = non compare
-      email: "privacy@example.com",  // FITTIZIA, DA SOSTITUIRE: contatto per le richieste sulla privacy
+      email: "biviobistrot@gmail.com",  // contatto per le richieste sulla privacy
       host: "Cloudflare Pages – Cloudflare, Inc.",  // fornitore che ospita il sito (compare nell'informativa)
       analytics: false,  // true = Cloudflare Web Analytics è accesa (dal pannello Cloudflare): cambia la frase dell'informativa. Non accende le statistiche.
       updated: "2026-10-15"  // data dell'informativa (AAAA-MM-GG): aggiornala quando cambi i dati o il testo
