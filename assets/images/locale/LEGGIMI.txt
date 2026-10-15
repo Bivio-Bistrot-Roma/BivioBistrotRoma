@@ -28,3 +28,6 @@ Quando hai caricato le foto, avvisami: le integro nel sito
 
 Dopo aver aggiunto foto, lanciare: python tools/ottimizza-foto.py (oppure chiedere a Claude).
 Le versioni ottimizzate finiscono in web/ e sono quelle usate dalla galleria del sito.
+
+Gli originali in esterni/ interni/ dettagli/ restano solo su questo computer (.gitignore): non vanno su GitHub
+e quindi non vengono pubblicati. Online vanno solo le versioni in web/. Conservane una copia altrove.
