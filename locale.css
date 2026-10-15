@@ -164,6 +164,43 @@ html.is-modal-open body { padding-right: var(--barra, 0px); }
   to { opacity: 1; transform: none; }
 }
 
+/* ---------- Sipario d'apertura ---------- */
+/* Gemello di quello del menu (menu/style.css), nella versione notte: stessi tempi, stessa curva, stesso giro del logo,
+   stessa scopertura dal basso. Un velo color notte copre l'apertura; il logo vero parte dal centro dello schermo
+   (--intro-dy, misurata da uno script subito dopo l'apertura in index.html), resta fermo un attimo, poi sale al suo
+   posto girando mentre il velo si ritira dal basso con un bordo sfumato; quando il logo è arrivato si accendono la
+   frase e i pulsanti. Sta dentro .hero (che isola i livelli): copre lo schermo intero perché l'apertura è alta
+   almeno quanto lo schermo e la pagina parte dall'inizio. Tutto in CSS: alla fine il velo resta nascosto. */
+.sipario { display: none; }
+.hero__logo { --intro-dy: 0px; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.senza-intro) .sipario {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: var(--notte);
+    -webkit-mask: linear-gradient(to bottom, #000 43.5%, transparent 56.5%) 0 0 / 100% 230% no-repeat;
+    mask: linear-gradient(to bottom, #000 43.5%, transparent 56.5%) 0 0 / 100% 230% no-repeat;
+    animation: sipario-svanisce 1.2s cubic-bezier(.6, 0, .2, 1) .5s forwards;
+  }
+  html:not(.senza-intro) .hero__titolo { animation: none; }
+  html:not(.senza-intro) .hero__logo {
+    position: relative;
+    z-index: 1; /* sopra il velo */
+    animation: sipario-logo 1.6s linear .1s both;
+  }
+  html:not(.senza-intro) .hero__frase { animation-delay: 1.45s; }
+  html:not(.senza-intro) .hero__azioni { animation-delay: 1.65s; }
+}
+/* Fino al 25% il logo resta fermo al centro (compare in dissolvenza), poi sale e gira */
+@keyframes sipario-logo {
+  from { opacity: 0; transform: translateY(var(--intro-dy)) perspective(900px) rotateY(-360deg) scale(1.1); }
+  12%  { opacity: 1; }
+  25%  { opacity: 1; transform: translateY(var(--intro-dy)) perspective(900px) rotateY(-360deg) scale(1.1); animation-timing-function: cubic-bezier(.6, 0, .2, 1); }
+  to   { opacity: 1; transform: translateY(0) perspective(900px) rotateY(0deg) scale(1); }
+}
+@keyframes sipario-svanisce { to { -webkit-mask-position: 0 100%; mask-position: 0 100%; visibility: hidden; } }
+
 /* ---------- Stato aperto/chiuso ---------- */
 .stato {
   display: inline-flex;
@@ -647,7 +684,7 @@ html.is-modal-open body { padding-right: var(--barra, 0px); }
 
 /* ---------- Stampa ---------- */
 @media print {
-  .hero__foto, .hero::before, .hero__barra, .hero__azioni, .skip-link, .locale, .prenota__azioni,
+  .sipario, .hero__foto, .hero::before, .hero__barra, .hero__azioni, .skip-link, .locale, .prenota__azioni,
   .persona__altro, .privacy, .modale-prenota, .to-top, .piede__privacy, .storia__foto, .cucina__foto { display: none !important; }
   .hero { min-height: 0; padding: 24px 0; background: none; color: var(--ink); }
   .hero__logo { filter: none; content: url("assets/brand/logo.png"); } /* il logo crema sul foglio bianco non si vedrebbe */

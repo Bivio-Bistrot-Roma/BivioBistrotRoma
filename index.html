@@ -12,6 +12,18 @@
     }
   </script>
   <meta name="robots" content="noindex">
+  <!-- Sipario d'apertura (gemello di quello del menu): si vede a ogni apertura del sito, ma non quando la pagina viene
+       ricaricata, ci si torna con avanti/indietro o l'indirizzo ha un hash. ?intro=1 (solo debug) lo fa ripartire sempre. -->
+  <script>
+    (function () {
+      try {
+        if (/[?&]intro=1(&|$)/.test(location.search)) return;
+        var nav = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+        var tipo = nav ? nav.type : (performance.navigation && performance.navigation.type === 1 ? "reload" : "navigate");
+        if (location.hash.length > 1 || tipo === "reload" || tipo === "back_forward") document.documentElement.classList.add("senza-intro");
+      } catch (e) { /* browser senza Navigation Timing: il sipario si vede a ogni caricamento */ }
+    })();
+  </script>
   <title data-i18n="meta.title">Bivio Bistrot — Roma</title>
   <meta name="description" data-i18n-content="meta.description" content="Bivio Bistrot, bistrot a Roma in Piazza Monte Grappa (Prati): cucina di stagione con radici siciliane, colazione al mattino, vini e cocktail fino a tardi.">
   <!-- SEO: anteprime social (Open Graph, Twitter) e dati strutturati (JSON-LD) per i motori di ricerca.
@@ -86,7 +98,7 @@
   <!-- CACHE: a ogni modifica di un CSS o JS cambia la versione ?v= (data AAAAMMGG). -->
   <link rel="stylesheet" href="assets/base.css?v=20261015">
   <link rel="stylesheet" href="assets/galleria.css?v=20261015">
-  <link rel="stylesheet" href="locale.css?v=20261016f">
+  <link rel="stylesheet" href="locale.css?v=20261016g">
   <!-- Script classici (no moduli): funziona anche da file:// — l'ordine conta.
        menu/menu-data.js serve per le stringhe in comune col menu. -->
   <script defer src="assets/locale-dati.js?v=20261015c"></script>
@@ -120,7 +132,21 @@
         <a class="bottone bottone--prenota" href="tel:+393780670878" data-meta="tel" data-apri-prenota aria-haspopup="dialog" data-i18n="hero.prenota">Prenota</a>
       </div>
     </div>
+    <!-- Sipario d'apertura (decorativo, solo CSS): un velo color notte copre l'apertura, il logo parte dal centro dello
+         schermo e sale al suo posto girando mentre il velo si ritira dal basso. -->
+    <div class="sipario" aria-hidden="true"></div>
   </header>
+  <!-- Distanza tra il centro dello schermo e il centro del logo, misurata prima del primo disegno: il logo del sipario
+       parte da lì (il suo posto dipende da frase e pulsanti, il CSS da solo non la conosce) -->
+  <script>
+    (function () {
+      if (document.documentElement.classList.contains("senza-intro")) return;
+      var logo = document.querySelector(".hero__logo");
+      if (!logo) return;
+      var r = logo.getBoundingClientRect();
+      logo.style.setProperty("--intro-dy", Math.round(window.innerHeight / 2 - (r.top + r.height / 2)) + "px");
+    })();
+  </script>
 
   <main>
     <!-- ---------------------------------------------------------------- La storia -->
