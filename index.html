@@ -22,25 +22,25 @@
   <!-- CACHE: a ogni modifica di un CSS o JS cambia la versione ?v= (data AAAAMMGG). -->
   <link rel="stylesheet" href="assets/base.css?v=20261015">
   <link rel="stylesheet" href="assets/galleria.css?v=20261015">
-  <link rel="stylesheet" href="locale.css?v=20261015b">
+  <link rel="stylesheet" href="locale.css?v=20261016b">
   <!-- Script classici (no moduli): funziona anche da file:// — l'ordine conta.
-       menu/menu-data.js serve per «I piatti più amati» (piatti con favorite: true) e per le stringhe in comune col menu. -->
-  <script defer src="assets/locale-dati.js?v=20261015b"></script>
+       menu/menu-data.js serve per le stringhe in comune col menu. -->
+  <script defer src="assets/locale-dati.js?v=20261015c"></script>
   <script defer src="assets/comune.js?v=20261015b"></script>
   <script defer src="assets/galleria.js?v=20261015"></script>
   <script defer src="menu/menu-data.js?v=20261015b"></script>
-  <script defer src="locale.js?v=20261015"></script>
+  <script defer src="locale.js?v=20261016d"></script>
 </head>
 <body>
   <a class="skip-link" href="#storia" data-i18n="skip">Vai ai contenuti</a>
 
   <!-- ---------------------------------------------------------------- Apertura -->
-  <header class="hero" id="top">
+  <header class="hero" id="top" tabindex="-1">
     <img class="hero__foto" src="assets/images/locale/web/interni-tavoli-al-buio-1600.jpg"
          srcset="assets/images/locale/web/interni-tavoli-al-buio-800.jpg 600w, assets/images/locale/web/interni-tavoli-al-buio-1600.jpg 1200w"
          sizes="100vw" width="1200" height="1600" alt="" fetchpriority="high">
     <div class="hero__barra">
-      <p class="stato" hidden></p>
+      <a class="stato" href="#orari" hidden></a>
       <div class="lingua" role="group" aria-label="Lingua" data-i18n-aria="langLabel">
         <button type="button" class="lingua__voce" lang="it" data-lang="it" aria-pressed="true" aria-label="Italiano">IT</button>
         <button type="button" class="lingua__voce" lang="en" data-lang="en" aria-pressed="false" aria-label="English">EN</button>
@@ -50,10 +50,10 @@
       <h1 class="hero__titolo">
         <img class="hero__logo" src="assets/brand/logo-cream.png" width="820" height="404" alt="Bivio Bistrot — bistrot, vini e cocktail a Roma" data-i18n-alt="hero.logo">
       </h1>
-      <p class="hero__frase" data-i18n="hero.frase">Dove le strade si incontrano e le storie cominciano.</p>
+      <p class="hero__frase" data-i18n="hero.frase">Dove le strade si incontrano e le storie cominciano</p>
       <div class="hero__azioni">
         <a class="bottone bottone--pieno" href="menu/" data-link-menu data-i18n="hero.menu">Vedi il menu</a>
-        <a class="bottone bottone--prenota" href="#prenota" data-i18n="hero.prenota">Prenota un tavolo</a>
+        <a class="bottone bottone--prenota" href="tel:+393780670878" data-meta="tel" data-apri-prenota aria-haspopup="dialog" data-i18n="hero.prenota">Prenota</a>
       </div>
     </div>
   </header>
@@ -62,20 +62,24 @@
     <!-- ---------------------------------------------------------------- La storia -->
     <section class="sezione sezione--carta storia" id="storia" aria-labelledby="storia-titolo">
       <div class="sezione__dentro storia__griglia">
-        <div class="storia__lato">
-          <h2 class="titolo" id="storia-titolo" data-i18n="storia.titolo">Bivio Bistrot</h2>
-          <a class="cornice storia__foto" href="assets/images/locale/web/esterni-terrazzino-1600.jpg" data-foto="esterni-terrazzino">
-            <img src="assets/images/locale/web/esterni-terrazzino-800.jpg" width="600" height="800" loading="lazy" alt="Tavolo apparecchiato sul terrazzino tra le piante">
-          </a>
-        </div>
-        <div class="testo">
+        <!-- Titolo, foto e racconto (su pc foto a sinistra, titolo e testo accanto). Si vedono i primi due paragrafi
+             e la frase finale; il resto si apre con «Leggi tutto» (stesso meccanismo di Le persone, locale.js).
+             Senza JS è tutto visibile. -->
+        <h2 class="titolo" id="storia-titolo" data-i18n="storia.titolo">Bivio Bistrot</h2>
+        <a class="cornice storia__foto" href="assets/images/locale/web/esterni-terrazzino-1600.jpg" data-foto="esterni-terrazzino">
+          <img src="assets/images/locale/web/esterni-terrazzino-800.jpg" width="600" height="800" loading="lazy" alt="Tavolo apparecchiato sul terrazzino tra le piante">
+        </a>
+        <div class="testo storia__testo">
           <p data-i18n="storia.1">Ci sono nomi che nascono per caso e altri che racchiudono una storia. Bivio è entrambe le cose.</p>
           <p data-i18n="storia.2">Nasce da un gioco di parole, certo: il locale si trova proprio a un bivio, un punto in cui le strade si incontrano e ogni direzione può portare da qualche parte.</p>
-          <p data-i18n="storia.3">Ma, a volte, le coincidenze hanno un significato più profondo. Nella vita, un bivio è quel momento in cui ci si ferma, si guarda ciò che si è lasciato alle spalle e si decide dove andare. È un cambiamento, una scelta, un salto nel vuoto. È il coraggio di abbandonare le certezze, mettersi in gioco e dare spazio a qualcosa di nuovo, anche senza sapere esattamente dove ci porterà.</p>
-          <p data-i18n="storia.4">Bivio Bistrot nasce proprio da questo spirito: dall'incontro di persone, percorsi ed esperienze diverse, unite dalla voglia di costruire qualcosa di proprio. Agata, Alex e Miriam, ognuno con la sua storia, le proprie capacità e il proprio modo di vedere le cose, hanno scelto di incontrarsi qui e dare vita a un progetto che parla di cucina, convivialità e passione.</p>
-          <p data-i18n="storia.5">Perché a volte le svolte più belle arrivano quando troviamo il coraggio di cambiare direzione. Quando decidiamo di credere in un'idea, di uscire dalla nostra zona di comfort e di trasformare un'intuizione in qualcosa di reale.</p>
-          <p data-i18n="storia.6">E così, quello che per qualcuno è soltanto un incrocio diventa per noi un punto di partenza. Un luogo in cui fermarsi, incontrarsi, condividere sapori e magari ritrovarsi, anche solo per un momento, sulla strada giusta.</p>
-          <p data-i18n="storia.7">Bivio Bistrot. Perché ogni scelta apre una strada, e ogni strada può diventare una bella storia da raccontare.</p>
+          <div class="persona__resto" id="storia-resto">
+            <p data-i18n="storia.3">Ma, a volte, le coincidenze hanno un significato più profondo. Nella vita, un bivio è quel momento in cui ci si ferma, si guarda ciò che si è lasciato alle spalle e si decide dove andare. È un cambiamento, una scelta, un salto nel vuoto. È il coraggio di abbandonare le certezze, mettersi in gioco e dare spazio a qualcosa di nuovo, anche senza sapere esattamente dove ci porterà.</p>
+            <p data-i18n="storia.4">Bivio Bistrot nasce proprio da questo spirito: dall'incontro di persone, percorsi ed esperienze diverse, unite dalla voglia di costruire qualcosa di proprio. Agata, Alex e Miriam, ognuno con la sua storia, le proprie capacità e il proprio modo di vedere le cose, hanno scelto di incontrarsi qui e dare vita a un progetto che parla di cucina, convivialità e passione.</p>
+            <p data-i18n="storia.5">Perché a volte le svolte più belle arrivano quando troviamo il coraggio di cambiare direzione. Quando decidiamo di credere in un'idea, di uscire dalla nostra zona di comfort e di trasformare un'intuizione in qualcosa di reale.</p>
+            <p data-i18n="storia.6">E così, quello che per qualcuno è soltanto un incrocio diventa per noi un punto di partenza. Un luogo in cui fermarsi, incontrarsi, condividere sapori e magari ritrovarsi, anche solo per un momento, sulla strada giusta.</p>
+          </div>
+          <button type="button" class="persona__altro" aria-expanded="true" aria-controls="storia-resto" hidden></button>
+          <p class="storia__finale" data-i18n="storia.7">Bivio Bistrot. Perché ogni scelta apre una strada, e ogni strada può diventare una bella storia da raccontare.</p>
         </div>
       </div>
     </section>
@@ -84,7 +88,7 @@
     <section class="sezione sezione--crema cucina" id="cucina" aria-labelledby="cucina-titolo">
       <div class="sezione__dentro cucina__griglia">
         <div class="cucina__testo">
-          <h2 class="titolo" id="cucina-titolo"><span data-i18n="cucina.titolo">La nostra cucina</span><span class="titolo__seguito" data-i18n="cucina.sottotitolo">autentica e secondo stagione</span></h2>
+          <h2 class="titolo" id="cucina-titolo"><span data-i18n="cucina.titolo">La nostra cucina</span><span class="titolo__seguito" data-i18n="cucina.sottotitolo">Autentica e secondo stagione</span></h2>
           <div class="testo">
             <p data-i18n="cucina.1">Crediamo in una cucina fatta di passione, dedizione e tanto amore. Nel nostro bistrot, ogni preparazione nasce da un lavoro artigianale, fatto di cura, attenzione e rispetto per le materie prime. Non seguiamo scorciatoie: scegliamo di dedicare il tempo necessario a ogni ricetta, valorizzando i sapori autentici e la qualità degli ingredienti.</p>
             <p data-i18n="cucina.2">La stagionalità è parte essenziale della nostra filosofia. Rispettiamo il ritmo delle stagioni, lasciandoci ispirare da ciò che la natura offre in ogni periodo dell'anno, per portare in tavola piatti freschi e genuini.</p>
@@ -99,19 +103,13 @@
             <img src="assets/images/locale/web/interni-tavolo-con-piatto-800.jpg" width="600" height="800" loading="lazy" alt="Pasta al pomodoro con formaggio grattugiato">
           </a>
         </div>
-        <!-- I piatti più amati: letti da menu/menu-data.js (favorite: true), così nomi e descrizioni restano quelli del menu -->
-        <div class="amati" hidden>
-          <h3 class="amati__titolo" data-i18n="amati.titolo">I piatti più amati</h3>
-          <ul class="amati__elenco"></ul>
-          <a class="amati__link" href="menu/" data-link-menu data-i18n="amati.link">Vedi tutto il menu</a>
-        </div>
       </div>
     </section>
 
-    <!-- ---------------------------------------------------------------- Le persone -->
+    <!-- ---------------------------------------------------------------- Chi siamo (le persone) -->
     <section class="sezione sezione--carta persone" id="persone" aria-labelledby="persone-titolo">
       <div class="sezione__dentro">
-        <h2 class="titolo" id="persone-titolo" data-i18n="persone.titolo">Le persone</h2>
+        <h2 class="titolo" id="persone-titolo" data-i18n="persone.titolo">Chi siamo</h2>
         <div class="persone__griglia">
           <article class="persona" aria-labelledby="agata-titolo">
             <h3 class="persona__nome" id="agata-titolo" data-i18n="agata.titolo">Agata, l'anima del bistrot</h3>
@@ -173,17 +171,21 @@
             <figcaption data-didascalia="interni-cucina-a-vista-2">Il bancone</figcaption>
           </figure>
           <figure class="locale__voce">
-            <a class="cornice" href="assets/images/locale/web/interni-cucina-a-vista-1600.jpg" data-foto="interni-cucina-a-vista">
-              <img src="assets/images/locale/web/interni-cucina-a-vista-800.jpg" width="600" height="800" loading="lazy" alt="Piatto servito sul bancone davanti alla cucina">
+            <a class="cornice" href="assets/images/locale/web/esterni-terrazzino-1600.jpg" data-foto="esterni-terrazzino">
+              <img src="assets/images/locale/web/esterni-terrazzino-800.jpg" width="600" height="800" loading="lazy" alt="Tavolo apparecchiato sul terrazzino tra le piante">
             </a>
-            <figcaption data-didascalia="interni-cucina-a-vista">Al bancone</figcaption>
+            <figcaption data-didascalia="esterni-terrazzino">Il terrazzino</figcaption>
           </figure>
         </div>
+        <!-- Apre la galleria dalla prima foto; compare solo se ci sono più foto di quelle in pagina (locale.js) -->
+        <p class="locale__tutte" hidden>
+          <button type="button" class="bottone bottone--chiaro" aria-haspopup="dialog"><span data-i18n="locale.tutte">Guarda tutte le foto</span></button>
+        </p>
       </div>
     </section>
 
     <!-- ---------------------------------------------------------------- Orari e dove siamo -->
-    <section class="sezione sezione--carta dove" id="orari" aria-labelledby="orari-titolo">
+    <section class="sezione sezione--bordeaux dove" id="orari" aria-labelledby="orari-titolo">
       <div class="sezione__dentro dove__griglia">
         <div>
           <h2 class="titolo" id="orari-titolo" data-i18n="orari.titolo">Orari</h2>
@@ -192,21 +194,10 @@
         </div>
         <div>
           <h2 class="titolo" id="dove-titolo" data-i18n="dove.titolo">Dove siamo</h2>
-          <address class="dove__indirizzo" data-meta="address">Piazza Monte Grappa, 1b, 00195 Roma</address>
-          <a class="bottone bottone--bordeaux" data-link="maps" href="https://maps.app.goo.gl/19F1xGau4LCWjnEJA" target="_blank" rel="noopener" data-i18n="dove.maps">Apri in Google Maps</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ---------------------------------------------------------------- Prenota -->
-    <section class="sezione sezione--bordeaux prenota" id="prenota" aria-labelledby="prenota-titolo">
-      <div class="sezione__dentro">
-        <h2 class="titolo" id="prenota-titolo" data-i18n="prenota.titolo">Prenota un tavolo</h2>
-        <p class="prenota__testo" data-i18n="prenota.testo">Chiamaci o scrivici su WhatsApp.</p>
-        <div class="prenota__azioni">
-          <a class="bottone bottone--crema" data-meta="phone" href="tel:+393780670878">+39 378 067 0878</a>
-          <a class="bottone bottone--chiaro" data-link="whatsapp" href="https://wa.me/393780670878" target="_blank" rel="noopener" data-i18n="prenota.whatsapp">Scrivici su WhatsApp</a>
-          <a class="bottone bottone--chiaro" data-link="thefork" target="_blank" rel="noopener" data-i18n="prenota.thefork" hidden>Prenota su TheFork</a>
+          <div class="dove__luogo">
+            <address class="dove__indirizzo" data-meta="address">Piazza Monte Grappa, 1b, 00195 Roma</address>
+            <a class="bottone bottone--chiaro" data-link="maps" href="https://maps.app.goo.gl/19F1xGau4LCWjnEJA" target="_blank" rel="noopener" data-i18n="dove.maps">Apri in Google Maps</a>
+          </div>
         </div>
       </div>
     </section>
@@ -225,6 +216,24 @@
       <p class="piede__anno">© <span class="anno">2026</span> Bivio Bistrot</p>
     </div>
   </footer>
+
+  <!-- Prenota: si apre dal pulsante dell'apertura (locale.js, apriPrenota). Senza JS il pulsante chiama. -->
+  <dialog class="modale-prenota" aria-labelledby="prenota-titolo">
+    <div class="modale-prenota__pannello">
+      <button type="button" class="modale-prenota__chiudi" aria-label="Chiudi" data-i18n-aria="lightbox.chiudi"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <h2 class="modale-prenota__titolo" id="prenota-titolo" data-i18n="prenota.titolo">Prenota un tavolo</h2>
+      <div class="prenota__azioni">
+        <a class="bottone bottone--crema" data-meta="tel" href="tel:+393780670878" data-i18n="prenota.chiama">Chiamaci</a>
+        <a class="bottone bottone--chiaro" data-link="whatsapp" href="https://wa.me/393780670878" target="_blank" rel="noopener" data-i18n="prenota.whatsapp">Scrivici su WhatsApp</a>
+        <a class="bottone bottone--chiaro" data-link="thefork" target="_blank" rel="noopener" data-i18n="prenota.thefork" hidden>Prenota su TheFork</a>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Torna su: compare dopo 600px di scorrimento (locale.js), come nel menu -->
+  <button class="to-top" type="button" aria-label="Torna su" data-i18n-aria="toTop" hidden>
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg>
+  </button>
 
   <!-- Galleria a tutto schermo (assets/galleria.js) -->
   <dialog class="lightbox" aria-label="Foto del locale" data-i18n-aria="lightbox.titolo">

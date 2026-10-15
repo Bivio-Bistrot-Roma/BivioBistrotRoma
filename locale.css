@@ -16,7 +16,10 @@
 
 html { scroll-padding-top: 16px; }
 body { background: var(--carta); }
+/* Con un modale aperto la pagina non scorre. Su pc sparisce la barra di scorrimento: il body recupera
+   la sua larghezza (--barra, misurata da locale.js), così la pagina non si allarga e la foto d'apertura resta ferma */
 html.is-modal-open { overflow: hidden; }
+html.is-modal-open body { padding-right: var(--barra, 0px); }
 
 .visually-hidden {
   position: absolute !important;
@@ -50,7 +53,7 @@ html.is-modal-open { overflow: hidden; }
   min-height: 48px;
   padding: .75rem 1.5rem;
   border: 1px solid transparent;
-  border-radius: 2px;
+  border-radius: 8px;
   font-family: var(--sans);
   font-size: .9375rem;
   font-weight: 500;
@@ -143,6 +146,8 @@ html.is-modal-open { overflow: hidden; }
   gap: 12px;
   margin-top: clamp(1.75rem, 4vw, 2.5rem);
 }
+/* I due pulsanti dell'apertura hanno la stessa larghezza e un testo un po' più grande */
+.hero__azioni .bottone { flex: 0 1 11rem; font-size: 1.0625rem; }
 .hero :focus-visible { outline-color: var(--brand-cream); }
 
 /* Un solo momento in movimento: logo e frase si accendono come una candela, all'apertura della pagina */
@@ -187,6 +192,9 @@ html.is-modal-open { overflow: hidden; }
   font-size: .9375rem;
 }
 .hero .stato::before { width: 8px; height: 8px; }
+/* La pillola è un link: porta a Orari e dove siamo, in fondo alla pagina */
+.hero a.stato { color: inherit; text-decoration: none; transition: background-color .2s var(--ease), border-color .2s var(--ease); }
+.hero a.stato:hover { background: rgba(28, 20, 17, .65); border-color: rgba(254, 226, 179, .6); }
 .hero .stato { white-space: nowrap; }
 /* Telefoni: pillola e lingua stanno sulla stessa riga, quindi tutto un po' più compatto */
 @media (max-width: 479.98px) {
@@ -246,10 +254,15 @@ html.is-modal-open { overflow: hidden; }
 .sezione--bordeaux { --fondo: var(--brand); color: var(--crema-testo); }
 /* Colore di partenza: quello della sezione precedente (la prima parte dal fondo scuro dell'apertura) */
 .sezione:first-child { --prima: var(--notte); }
+.sezione--carta:first-child, .sezione--crema:first-child { --sfuma: 12px; } /* dal fondo scuro dell'apertura: sfumatura corta */
 .sezione--carta + .sezione { --prima: var(--carta); }
 .sezione--crema + .sezione { --prima: var(--accent-soft); }
 .sezione--notte + .sezione { --prima: var(--notte); }
 .sezione--bordeaux + .sezione { --prima: var(--brand); }
+/* Tra scuro (anche bordeaux) e chiaro la sfumatura è cortissima: quella lunga passa da una fascia grigia */
+.sezione--notte + .sezione--carta, .sezione--notte + .sezione--crema,
+.sezione--carta + .sezione--notte, .sezione--crema + .sezione--notte,
+.sezione--bordeaux + .sezione--carta, .sezione--bordeaux + .sezione--crema { --sfuma: 12px; }
 
 .titolo {
   font-family: var(--serif);
@@ -303,12 +316,28 @@ html.is-modal-open { overflow: hidden; }
 .cornice:focus-visible { outline-offset: 4px; }
 
 /* ---------- La storia ---------- */
-.storia__griglia { display: grid; gap: clamp(2rem, 5vw, 3rem); }
-.storia__foto { margin-top: clamp(1.5rem, 4vw, 2.5rem); aspect-ratio: 3 / 4; max-width: 360px; }
+/* Su pc foto a sinistra, titolo e testo accanto, centrati in altezza rispetto alla foto. Aperto il «Leggi tutto»,
+   il testo si allunga e la foto resta ferma (sticky) mentre si legge. */
+.storia__griglia { display: grid; gap: clamp(1.75rem, 5vw, 2.5rem); }
+.storia__foto { aspect-ratio: 3 / 4; max-width: 360px; }
+.testo .storia__finale {
+  margin-top: 1.5em;
+  font-style: italic;
+  font-size: clamp(1.375rem, 1.15rem + 1vw, 1.875rem);
+  line-height: 1.3;
+  color: var(--brand);
+}
 @media (min-width: 900px) {
-  .storia__griglia { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(3rem, 7vw, 6rem); align-items: start; }
-  .storia__lato { position: sticky; top: 40px; }
-  .storia__foto { max-width: none; }
+  .storia__griglia {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas: "foto ." "foto titolo" "foto testo" "foto .";
+    grid-template-rows: 1fr auto auto 1fr;
+    column-gap: clamp(3rem, 7vw, 6rem);
+    row-gap: 0;
+  }
+  .storia__griglia .titolo { grid-area: titolo; margin-bottom: clamp(1.25rem, 2.5vw, 2rem); }
+  .storia__foto { grid-area: foto; max-width: none; align-self: start; position: sticky; top: 40px; }
+  .storia__testo { grid-area: testo; }
 }
 
 /* ---------- La cucina ---------- */
@@ -327,47 +356,8 @@ html.is-modal-open { overflow: hidden; }
 }
 @media (min-width: 900px) {
   .cucina__griglia { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); column-gap: clamp(3rem, 7vw, 6rem); align-items: start; }
-  .amati { grid-column: 1 / -1; }
 }
 
-/* I piatti più amati: una piccola carta, come il menu del locale */
-.amati {
-  padding: clamp(1.75rem, 4vw, 2.75rem) clamp(1.25rem, 4vw, 3rem);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 3px;
-}
-.amati[hidden] { display: none; }
-.amati__titolo {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 500;
-  font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
-  line-height: 1.15;
-  color: var(--brand);
-}
-.amati__elenco { display: grid; gap: 1.25rem; margin-top: 1.25rem; }
-@media (min-width: 700px) {
-  .amati__elenco { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); column-gap: clamp(2rem, 5vw, 4rem); }
-}
-.amati__nome {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 1.375rem;
-  line-height: 1.2;
-  font-variant-numeric: lining-nums;
-}
-.amati__desc { margin-top: .2rem; color: var(--muted); font-size: .9375rem; line-height: 1.5; }
-.amati__link {
-  display: inline-block;
-  margin-top: 1.5rem;
-  color: var(--brand);
-  font-weight: 500;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-}
-.amati__link:hover { text-decoration-thickness: 2px; }
 
 /* ---------- Le persone ---------- */
 .persone__griglia { display: grid; gap: clamp(2.75rem, 6vw, 3.5rem); margin-top: clamp(2rem, 5vw, 3.5rem); }
@@ -401,6 +391,13 @@ html.is-modal-open { overflow: hidden; }
   text-underline-offset: 4px;
 }
 .persona__altro[hidden] { display: none; }
+.persona[hidden] { display: none; }
+/* Scheda aperta da sola («Leggi tutto»): su pc occupa tutta la riga e il testo va su due colonne */
+@media (min-width: 960px) {
+  .persona.is-sola { grid-column: 1 / -1; }
+  .persona.is-sola .testo { columns: 2; column-gap: clamp(2rem, 4vw, 3.5rem); }
+  .persona.is-sola .testo p { break-inside: avoid; }
+}
 .persona__altro:hover { text-decoration-thickness: 2px; }
 
 /* ---------- Il locale (foto) ---------- */
@@ -421,6 +418,10 @@ html.is-modal-open { overflow: hidden; }
   font-size: 1.125rem;
   color: rgba(245, 230, 204, .78);
 }
+.locale__tutte { margin-top: clamp(2rem, 5vw, 3rem); text-align: center; }
+.locale__tutte[hidden] { display: none; }
+.locale__tutte .bottone { background: none; cursor: pointer; }
+.locale__tutte .bottone:hover { background: rgba(254, 226, 179, .12); }
 /* Su schermi larghi le tre foto stanno in una riga, alla stessa altezza: la cucina a vista occupa due colonne */
 @media (min-width: 900px) {
   .locale__griglia { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -451,6 +452,12 @@ html.is-modal-open { overflow: hidden; }
 }
 .orari__riga.is-oggi dt { color: var(--brand); }
 .orari__riga.is-oggi dd { color: var(--brand); font-weight: 600; }
+/* Sul fondo bordeaux: righe, giorno di oggi e stato in crema */
+.sezione--bordeaux .orari__riga + .orari__riga { border-top-color: rgba(245, 230, 204, .2); }
+.sezione--bordeaux .orari__riga.is-oggi dt,
+.sezione--bordeaux .orari__riga.is-oggi dd { color: var(--brand-cream); }
+.sezione--bordeaux .stato--chiaro { color: rgba(245, 230, 204, .8); }
+.sezione--bordeaux :focus-visible { outline-color: var(--brand-cream); }
 .dove__indirizzo {
   margin: 1.5rem 0 1.75rem;
   font-family: var(--serif);
@@ -461,30 +468,98 @@ html.is-modal-open { overflow: hidden; }
   max-width: 16em;
 }
 
-/* ---------- Prenota ---------- */
-.prenota { text-align: center; }
-.prenota__testo {
-  margin: 1rem auto 0;
-  max-width: 30em;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(1.25rem, 1.1rem + .6vw, 1.6rem);
+/* Il pulsante Maps sta centrato sotto l'indirizzo: il blocco è largo quanto il testo */
+.dove__luogo { display: inline-flex; flex-direction: column; align-items: center; }
+.dove__luogo .dove__indirizzo { align-self: stretch; }
+
+/* ---------- Prenota (modale) ---------- */
+/* Pannello bordeaux al centro: entra salendo e comparendo, esce al contrario (classe is-aperto, locale.js) */
+.modale-prenota {
+  width: min(460px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  padding: 0;
+  border: 1px solid rgba(254, 226, 179, .25);
+  border-radius: 16px;
+  background: var(--brand);
   color: var(--crema-testo);
+  box-shadow: 0 24px 60px rgba(28, 20, 17, .45);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(18px) scale(.97);
+  transition: opacity .28s var(--ease), transform .34s var(--ease);
 }
+.modale-prenota::backdrop { background: rgba(28, 20, 17, 0); transition: background-color .28s var(--ease); }
+.modale-prenota.is-aperto { opacity: 1; transform: none; }
+.modale-prenota.is-aperto::backdrop { background: rgba(28, 20, 17, .6); }
+.modale-prenota__pannello { position: relative; padding: clamp(2.5rem, 7vw, 3.25rem) clamp(1.5rem, 6vw, 2.5rem) clamp(1.75rem, 6vw, 2.5rem); }
+.modale-prenota__chiudi {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--brand-cream);
+}
+.modale-prenota__chiudi:hover { background: rgba(254, 226, 179, .12); }
+.modale-prenota__titolo {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2.25rem, 1.9rem + 1.5vw, 2.75rem);
+  line-height: 1.05;
+  color: var(--brand-cream);
+}
+/* Nel modale i pulsanti stanno uno sotto l'altro, larghi uguali */
 .prenota__azioni {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
   gap: 12px;
-  margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  margin-top: clamp(1.5rem, 5vw, 2rem);
 }
-.prenota :focus-visible { outline-color: var(--brand-cream); }
+.modale-prenota :focus-visible { outline-color: var(--brand-cream); }
+
+/* ---------- Torna su (come nel menu) ---------- */
+.to-top {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: max(28px, calc(env(safe-area-inset-bottom, 0px) + 12px));
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .3s var(--ease), transform .3s var(--ease), visibility 0s linear .3s;
+}
+.to-top.is-visible {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+.to-top[hidden] { display: none; }
+.hero:focus { outline: none; }
 
 /* ---------- Footer ---------- */
 .piede {
   padding: clamp(48px, 7vw, 80px) var(--gutter) clamp(32px, 5vw, 48px);
-  /* Sfuma dal bordeaux di Prenota, ultima sezione */
-  background: linear-gradient(to bottom, var(--brand) 0, color-mix(in srgb, var(--brand) 50%, var(--carta)) clamp(22px, 3.15vw, 36px), var(--carta) clamp(48px, 7vw, 80px)) var(--carta);
+  /* Sfuma dal bordeaux di Orari e dove siamo, ultima sezione: cortissima, come tra le sezioni scure e chiare */
+  background: linear-gradient(to bottom, var(--brand) 0, color-mix(in srgb, var(--brand) 50%, var(--carta)) 5px, var(--carta) 12px) var(--carta);
   color: var(--muted);
   font-size: .9375rem;
   text-align: center;
@@ -560,18 +635,18 @@ html.is-modal-open { overflow: hidden; }
 /* ---------- Movimento ridotto ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .cornice img, .bottone, .skip-link { transition: none; }
+  .cornice img, .bottone, .skip-link, .modale-prenota, .modale-prenota::backdrop { transition: none; }
+  .modale-prenota { transform: none; }
   .cornice:hover img { transform: none; }
 }
 
 /* ---------- Stampa ---------- */
 @media print {
   .hero__foto, .hero::before, .hero__barra, .hero__azioni, .skip-link, .locale, .prenota__azioni,
-  .persona__altro, .privacy, .piede__privacy, .storia__foto, .cucina__foto { display: none !important; }
+  .persona__altro, .privacy, .modale-prenota, .to-top, .piede__privacy, .storia__foto, .cucina__foto { display: none !important; }
   .hero { min-height: 0; padding: 24px 0; background: none; color: var(--ink); }
   .hero__logo { filter: none; content: url("assets/brand/logo.png"); } /* il logo crema sul foglio bianco non si vedrebbe */
   .sezione { padding: 24px 0; background: none !important; color: var(--ink) !important; }
   .titolo, .sezione--bordeaux .titolo { color: var(--brand) !important; }
-  .prenota__testo { color: var(--ink); }
   .persona__resto[hidden] { display: block !important; }
 }
