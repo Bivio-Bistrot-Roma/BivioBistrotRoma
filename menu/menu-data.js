@@ -247,7 +247,7 @@ window.BIVIO_MENU = Object.freeze({
     },
     {
       id: "pane-burro-alici", name: "Pane, burro e alici", description: "Alici del Cantabrico",
-      price: 18, allergens: [1, 4, 7], category: "per-iniziare", image: null,
+      price: 16, allergens: [1, 4, 7], category: "per-iniziare", image: null,
       en: { name: "Bread, butter and anchovies", description: "Cantabrian anchovies" },
       placeholder: null
     },
@@ -301,7 +301,7 @@ window.BIVIO_MENU = Object.freeze({
     },
     {
       id: "entrecote", name: "Entrecôte danese ai ferri", description: "Con patate al rosmarino",
-      price: 22, allergens: [12], category: "per-finire", image: null,
+      price: 26, allergens: [12], category: "per-finire", image: null,
       en: { name: "Grilled Danish entrecôte", description: "With rosemary potatoes" },
       placeholder: null
     },
