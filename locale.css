@@ -75,6 +75,9 @@ html.is-modal-open body { padding-right: var(--barra, 0px); }
 .bottone--crema:hover { background: #fff3dc; }
 .bottone--chiaro { border-color: rgba(254, 226, 179, .6); color: var(--brand-cream); }
 .bottone--chiaro:hover { background: rgba(254, 226, 179, .12); }
+/* Contorno bordeaux, per i fondi chiari (modale Prenota) */
+.bottone--contorno { border-color: rgba(115, 18, 35, .45); color: var(--brand); }
+.bottone--contorno:hover { background: rgba(115, 18, 35, .06); border-color: var(--brand); }
 .bottone[aria-disabled="true"] { opacity: .5; cursor: not-allowed; }
 
 /* ---------- Apertura ---------- */
@@ -355,7 +358,9 @@ html.is-modal-open body { padding-right: var(--barra, 0px); }
   border-radius: 4px;
 }
 @media (min-width: 900px) {
-  .cucina__griglia { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); column-gap: clamp(3rem, 7vw, 6rem); align-items: start; }
+  /* Su pc le foto prendono più spazio del testo */
+  .cucina__griglia { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: clamp(3rem, 5vw, 4.5rem); align-items: center; }
+  .cucina__foto-grande { width: 82%; }
 }
 
 
@@ -478,17 +483,17 @@ html.is-modal-open body { padding-right: var(--barra, 0px); }
   width: min(460px, calc(100vw - 32px));
   max-height: calc(100vh - 32px);
   padding: 0;
-  border: 1px solid rgba(254, 226, 179, .25);
+  border: 1px solid rgba(115, 18, 35, .12);
   border-radius: 16px;
-  background: var(--brand);
-  color: var(--crema-testo);
+  background: var(--brand-cream);
+  color: var(--ink);
   box-shadow: 0 24px 60px rgba(28, 20, 17, .45);
   text-align: center;
   opacity: 0;
-  transform: translateY(18px) scale(.97);
-  transition: opacity .28s var(--ease), transform .34s var(--ease);
+  transform: translateY(40px) scale(.92);
+  transition: opacity .34s var(--ease), transform .46s var(--ease);
 }
-.modale-prenota::backdrop { background: rgba(28, 20, 17, 0); transition: background-color .28s var(--ease); }
+.modale-prenota::backdrop { background: rgba(28, 20, 17, 0); transition: background-color .4s var(--ease); }
 .modale-prenota.is-aperto { opacity: 1; transform: none; }
 .modale-prenota.is-aperto::backdrop { background: rgba(28, 20, 17, .6); }
 .modale-prenota__pannello { position: relative; padding: clamp(2.5rem, 7vw, 3.25rem) clamp(1.5rem, 6vw, 2.5rem) clamp(1.75rem, 6vw, 2.5rem); }
@@ -504,15 +509,15 @@ html.is-modal-open body { padding-right: var(--barra, 0px); }
   border: 0;
   border-radius: 50%;
   background: none;
-  color: var(--brand-cream);
+  color: var(--brand);
 }
-.modale-prenota__chiudi:hover { background: rgba(254, 226, 179, .12); }
+.modale-prenota__chiudi:hover { background: rgba(115, 18, 35, .08); }
 .modale-prenota__titolo {
   font-family: var(--serif);
   font-weight: 500;
   font-size: clamp(2.25rem, 1.9rem + 1.5vw, 2.75rem);
   line-height: 1.05;
-  color: var(--brand-cream);
+  color: var(--brand);
 }
 /* Nel modale i pulsanti stanno uno sotto l'altro, larghi uguali */
 .prenota__azioni {
@@ -520,7 +525,7 @@ html.is-modal-open body { padding-right: var(--barra, 0px); }
   gap: 12px;
   margin-top: clamp(1.5rem, 5vw, 2rem);
 }
-.modale-prenota :focus-visible { outline-color: var(--brand-cream); }
+.modale-prenota :focus-visible { outline-color: var(--brand); }
 
 /* ---------- Torna su (come nel menu) ---------- */
 .to-top {

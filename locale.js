@@ -641,9 +641,9 @@
       prenotaInChiusura = false;
       prenotaEl.close();
     }
-    function suFine(e) { if (e.target === prenotaEl && e.propertyName === "opacity") fine(); }
+    function suFine(e) { if (e.target === prenotaEl && e.propertyName === "transform") fine(); }
     prenotaEl.addEventListener("transitionend", suFine);
-    setTimeout(fine, 450); // riserva se transitionend non arriva
+    setTimeout(fine, 600); // riserva se transitionend non arriva
     prenotaEl.classList.remove("is-aperto");
   }
 
