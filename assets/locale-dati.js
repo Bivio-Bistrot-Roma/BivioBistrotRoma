@@ -94,7 +94,7 @@ window.BIVIO_LOCALE = Object.freeze({
         "Solo la lingua che scegli (italiano o inglese), nella memoria del browser, per non chiedertela a ogni visita. Non serve a profilarti e non richiede consenso. Puoi cancellarla dalle impostazioni del browser."
       ] },
       { h: "Link esterni", p: [
-        "I pulsanti Mappa e WhatsApp e il numero di telefono aprono servizi esterni (Google Maps, WhatsApp, l'app del telefono), che trattano i tuoi dati secondo le proprie informative. Se ci scrivi o ci chiami, usiamo i tuoi dati solo per risponderti."
+        "I pulsanti Mappa, WhatsApp e TheFork e il numero di telefono aprono servizi esterni (Google Maps, WhatsApp, TheFork, l'app del telefono), che trattano i tuoi dati secondo le proprie informative. Se ci scrivi o ci chiami, usiamo i tuoi dati solo per risponderti. Se prenoti con TheFork, TheFork ci trasmette i dati della prenotazione per gestirla."
       ] },
       { h: "I tuoi diritti", p: [
         "Puoi chiedere in ogni momento l'accesso ai tuoi dati, la rettifica, la cancellazione, la limitazione o l'opposizione al trattamento scrivendo a {email}.",
@@ -119,7 +119,7 @@ window.BIVIO_LOCALE = Object.freeze({
         "Only the language you choose (Italian or English), in your browser's storage, so we don't have to ask at every visit. It is not used to profile you and requires no consent. You can delete it from your browser settings."
       ] },
       { h: "External links", p: [
-        "The Map and WhatsApp buttons and the phone number open external services (Google Maps, WhatsApp, your phone app), which process your data under their own privacy notices. If you write or call us, we use your data only to reply."
+        "The Map, WhatsApp and TheFork buttons and the phone number open external services (Google Maps, WhatsApp, TheFork, your phone app), which process your data under their own privacy notices. If you write or call us, we use your data only to reply. If you book through TheFork, TheFork shares your booking details with us so we can manage it."
       ] },
       { h: "Your rights", p: [
         "You can ask at any time to access, correct or delete your data, or to restrict or object to its processing, by writing to {email}.",
