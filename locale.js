@@ -27,7 +27,7 @@
     "skip": "Skip to content",
     "langLabel": "Language",
     "hero.logo": "Bivio Bistrot — bistrot, wines and cocktails in Rome",
-    "hero.frase": "Where roads meet and stories begin.",
+    "hero.frase": "Where roads meet and stories begin",
     "hero.menu": "See the menu",
     "hero.prenota": "Book",
     "hero.scorri": "Discover Bivio",
@@ -42,7 +42,7 @@
     "storia.7": "Bivio Bistrot. Because every choice opens a road, and every road can become a story worth telling.",
 
     "cucina.titolo": "Our kitchen",
-    "cucina.sottotitolo": "authentic and seasonal",
+    "cucina.sottotitolo": "Authentic and seasonal",
     "cucina.1": "We believe in cooking made of passion, dedication and a great deal of love. In our bistrot, every dish is the result of craftsmanship: care, attention and respect for the ingredients. We take no shortcuts: we choose to give every recipe the time it needs, bringing out authentic flavours and the quality of what we use.",
     "cucina.2": "Seasonality is an essential part of our philosophy. We follow the rhythm of the seasons, taking inspiration from what nature offers throughout the year, to bring fresh, wholesome dishes to the table.",
     "cucina.3": "In Agata's kitchen, Sicilian tradition meets the experience gained in Rome and the wish to offer something genuine every day. A cuisine of roots, memories and passion, where every dish tells a story.",
