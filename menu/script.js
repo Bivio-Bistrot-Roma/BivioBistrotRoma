@@ -2103,9 +2103,11 @@
   // una volta su RAGNO_PROBABILITA, un ragno grosso attraversa lo schermo da destra a sinistra, all'altezza del centro:
   // entra di corsa, rallenta al centro, riesce di corsa. Finché passa, il menu non scorre (rotella, dita, tasti: bloccaScorrimento).
   // Toccato, viene schiacciato: sparisce appiattendosi e sulla pagina resta per qualche secondo una chiazza verde
-  // (disegnaChiazza), che scorre con il menu e poi svanisce. Non passa se c'è un pop-up aperto o la pagina non si vede.
+  // (disegnaChiazza), che scorre con il menu e poi svanisce. Se è il suo momento ma la pagina non si vede (scheda in
+  // secondo piano) o c'è un pop-up aperto, aspetta che la scheda torni visibile o che il pop-up si chiuda, e passa
+  // poco dopo: così la probabilità è quella vera per chi guarda il menu.
   // Solo decorativo (aria-hidden); con il movimento ridotto non c'è. ?ragno=1 (solo debug) lo fa passare sempre.
-  var RAGNO_PROBABILITA = 0.33;
+  var RAGNO_PROBABILITA = 0.66;
   var RAGNO_CHIAVE = "bivio-ragno";
 
   /** Il ragno visto dall'alto, rivolto a sinistra, sul modello di un ragno lupo ma cattivo: zampe lunghe e spigolose,
@@ -2235,9 +2237,22 @@
     return disegno;
   }
 
-  function passaRagno(tentativi) {
-    if (document.hidden || document.querySelector("dialog[open]")) {
-      if (tentativi > 0) window.setTimeout(function () { passaRagno(tentativi - 1); }, 6000);
+  function passaRagno() {
+    function riprova() { window.setTimeout(passaRagno, 1500); }
+    if (document.hidden) {
+      document.addEventListener("visibilitychange", function torna() {
+        if (document.hidden) return;
+        document.removeEventListener("visibilitychange", torna);
+        riprova();
+      });
+      return;
+    }
+    var aperto = document.querySelector("dialog[open]");
+    if (aperto) {
+      aperto.addEventListener("close", function chiuso() {
+        aperto.removeEventListener("close", chiuso);
+        riprova();
+      });
       return;
     }
     var ragno = el("div", { class: "ragno", "aria-hidden": "true" }, [disegnaRagno()]);
@@ -2308,7 +2323,7 @@
       } catch (e) { /* storage bloccato: vale il solo tiro di dado */ }
       if (Math.random() > RAGNO_PROBABILITA) return;
     }
-    window.setTimeout(function () { passaRagno(3); }, sempre ? 1500 : 5000 + Math.random() * 10000);
+    window.setTimeout(passaRagno, sempre ? 1500 : 5000 + Math.random() * 10000);
   }
 
   lang = detectLanguage();
