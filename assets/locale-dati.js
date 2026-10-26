@@ -41,6 +41,10 @@ window.BIVIO_LOCALE = Object.freeze({
   meta: {
     name: "Bivio Bistrot", city: "Roma", currency: "EUR", locale: "it-IT",
     languages: ["it", "en"], defaultLanguage: "it",
+    // Tema a tempo del menu, acceso e spento a mano: "" = nessuno, "halloween" = zucchette al posto delle bollicine,
+    // ragnatele con ragnetti, ragno grosso che a volte attraversa lo schermo, gatto nero, sipario con la ragnatela.
+    // Per provarlo in qualsiasi momento: ?tema=halloween nell'URL; ?tema=off lo spegne.
+    tema: "halloween",
     // Orari di apertura, lunedì -> domenica (indice 0 = lunedì). null = chiuso tutto il giorno.
     // close <= open = chiusura dopo mezzanotte (es. sabato 11:30-02:00 chiude alle 02:00 di domenica).
     hours: [

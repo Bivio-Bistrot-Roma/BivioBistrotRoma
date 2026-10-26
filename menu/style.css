@@ -320,7 +320,7 @@ a.pill-link[href]:hover { border-color: var(--accent); }
 
 /* ---------- Onda e bollicine (bordo tra intestazione e menu) ---------- */
 /* Il fondo del menu risale nell'intestazione con un'onda sola, lunga e bassa; poche bollicine sottili
-   salgono lente in due punti, come il perlage in un calice. Solo decorazione: non riceve clic. */
+   salgono lente in tre punti (ai lati e al centro), come il perlage in un calice. Solo decorazione: non riceve clic. */
 .onda {
   --onda-h: clamp(18px, 4.5vw, 36px);
   position: absolute;
@@ -357,6 +357,9 @@ a.pill-link[href]:hover { border-color: var(--accent); }
 .onda__bolla:nth-child(5) { left: 84%;   --d: 3px; --t: 7.5s; --r: 1.3s; bottom: 85%; }
 .onda__bolla:nth-child(6) { left: 15%;   --d: 4px; --t: 9s;   --r: 3s;  bottom: 55%; }
 .onda__bolla:nth-child(7) { left: 17.5%; --d: 6px; --t: 11s;  --r: 7.5s; bottom: 70%; }
+.onda__bolla:nth-child(8) { left: 47%;   --d: 4px; --t: 8.5s; --r: 5s;  bottom: 65%; }
+.onda__bolla:nth-child(9) { left: 50%;   --d: 6px; --t: 10s;  --r: 1.8s; bottom: 75%; }
+.onda__bolla:nth-child(10) { left: 52.5%; --d: 3px; --t: 7.5s; --r: 8s;  bottom: 60%; }
 @keyframes bolla-sale {
   0%   { opacity: 0;   transform: translate(0, 0); }
   15%  { opacity: .45; }
@@ -1168,8 +1171,8 @@ a.titoli__voce:hover { color: var(--ink); }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   padding: 0;
   border: 0;
   border-radius: 50%;
@@ -1842,4 +1845,341 @@ html.is-modal-open { overflow: hidden; }
   .menu-info { break-inside: avoid; background: none; border: 1px solid var(--ink); margin-top: 1.5rem; }
   .menu-info--stampa { display: block; }
   .is-entering .category--list2, .is-entering .category--spirit, .is-entering .dish { animation: none; }
+}
+
+/* ---------- Tema Halloween ---------- */
+/* Si accende con `meta.tema: "halloween"` in assets/locale-dati.js (o con ?tema=halloween per provare, ?tema=off per
+   spegnere): script.js mette la classe `tema-halloween` su <html>. A evento finito basta svuotare `tema` e questo blocco
+   non fa più nulla. Sagome SVG inline: zucchette al posto delle bollicine, ragnatele negli angoli (con due ragnetti), un ragno grosso
+   che ogni tanto attraversa lo schermo,
+   una zucchetta nel footer; il gatto del footer diventa solo nero (script.js: MANTELLI). Solo decorazione. */
+.tema-halloween {
+  --hw-arancio: #D9822B;
+  --hw-zucca: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 5.2C9.8 3.6 10.4 2.4 11.8 1.6' fill='none' stroke='%235B6B2E' stroke-width='1.8' stroke-linecap='round'/%3E%3Cg fill='%23D9822B'%3E%3Cellipse cx='5.6' cy='12' rx='5' ry='6.2'/%3E%3Cellipse cx='14.4' cy='12' rx='5' ry='6.2'/%3E%3Cellipse cx='10' cy='12' rx='4.2' ry='6.8'/%3E%3C/g%3E%3Cpath d='M10 5.4V18.4M6.6 6.8C4.6 10 4.6 14 6.6 17.2M13.4 6.8C15.4 10 15.4 14 13.4 17.2' fill='none' stroke='%23A95A1C' stroke-width='.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  --hw-ragnatela: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23731223' stroke-width='.9' stroke-linecap='round'%3E%3Cpath d='M0 0H100M0 0L92.4 38.3M0 0L70.7 70.7M0 0L38.3 92.4M0 0V100'/%3E%3Cpath d='M30 0Q26.5 5.3 27.7 11.5Q22.4 15 21.2 21.2Q15 22.4 11.5 27.7Q5.3 26.5 0 30'/%3E%3Cpath d='M60 0Q53 10.5 55.4 23Q44.9 30 42.4 42.4Q30 44.9 23 55.4Q10.5 53 0 60'/%3E%3Cpath d='M90 0Q79.5 15.8 83.2 34.5Q67.3 45 63.6 63.6Q45 67.3 34.5 83.2Q15.8 79.5 0 90'/%3E%3C/svg%3E");
+}
+
+/* Bollicine → zucchette, con lo stesso moto di salita e un leggero dondolio */
+.tema-halloween .onda__bolla {
+  width: calc(var(--d) * 3);
+  height: calc(var(--d) * 3);
+  border: 0;
+  border-radius: 0;
+  background: var(--hw-zucca) center / contain no-repeat;
+  animation-name: bolla-sale-hw;
+}
+/* Quelle dello sbuffo (cambio sezione) salgono come le bollicine dello sbuffo */
+.tema-halloween .onda__bolla--extra { animation-name: bolla-sbuffo; }
+@keyframes bolla-sale-hw {
+  0%   { opacity: 0;  transform: translate(0, 0) rotate(0); }
+  15%  { opacity: .8; }
+  35%  { transform: translate(-3px, calc(var(--sale) * -.35)) rotate(-9deg); }
+  65%  { transform: translate(3px, calc(var(--sale) * -.7)) rotate(8deg); }
+  85%  { opacity: .6; }
+  100% { opacity: 0;  transform: translate(-1px, calc(var(--sale) * -1)) rotate(0); }
+}
+
+/* Ragnatele negli angoli dell'intestazione e del footer (dietro i contenuti, non ricevono tocchi) */
+.tema-halloween .site-header::before,
+.tema-halloween .site-header::after,
+.tema-halloween .site-footer::before,
+.tema-halloween .site-footer::after {
+  content: "";
+  position: absolute;
+  width: clamp(64px, 17vw, 110px);
+  height: clamp(64px, 17vw, 110px);
+  background: var(--hw-ragnatela) 0 0 / 100% 100% no-repeat;
+  opacity: .28;
+  pointer-events: none;
+}
+.tema-halloween .site-header::before { top: 0; left: 0; }
+.tema-halloween .site-header::after  { top: 0; right: 0; transform: scaleX(-1); }
+.tema-halloween .site-footer::before { bottom: 0; left: 0; transform: scaleY(-1); }
+.tema-halloween .site-footer::after  { bottom: 0; right: 0; transform: scale(-1, -1); }
+
+/* Zucchetta nel footer, accanto al © */
+.tema-halloween .site-footer__copy::after {
+  content: "";
+  display: inline-block;
+  width: 1.3em;
+  height: 1.3em;
+  margin-left: .6em;
+  vertical-align: -.3em;
+  background: var(--hw-zucca) center / contain no-repeat;
+}
+
+/* I ragnetti (script.js: avviaRagnetti), uno per ciascuna ragnatela in alto. La fascia è alta quanto la discesa e
+   taglia il filo in cima; il corpo parte nascosto sopra il bordo, scende, dondola, risale e resta su fino al giro dopo.
+   Senza la trasformazione dell'animazione (anche quando scappa) sta su, nascosto. */
+.ragnetto {
+  position: absolute;
+  top: 0;
+  width: 28px;
+  height: calc(var(--header-pt) + 24px);
+  overflow: hidden;
+  pointer-events: none;
+  --giu: calc(var(--header-pt) - 6px);
+}
+.ragnetto--sinistra { left: calc(clamp(64px, 17vw, 110px) * .42); }
+/* Quello di destra scende sfalsato di mezzo giro e un po' meno in basso */
+.ragnetto--destra { right: calc(clamp(64px, 17vw, 110px) * .42); --giu: calc(var(--header-pt) - 16px); }
+.ragnetto--destra .ragnetto__corpo { animation-delay: 16.5s; }
+.ragnetto__corpo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--brand);
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transform: translateY(-30px);
+  animation: ragnetto-scende 30s ease-in-out 1.5s infinite both;
+}
+.ragnetto__corpo::before { /* il filo */
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 60%;
+  width: 1px;
+  height: 240px;
+  background: currentColor;
+  opacity: .45;
+}
+.ragnetto__corpo svg { display: block; fill: currentColor; }
+.ragnetto__zampe { fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.ragnetto__corpo--scappa { transition: transform .45s cubic-bezier(.4, 0, .9, .5); }
+@keyframes ragnetto-scende {
+  /* 30 s: circa 10 s di discesa, dondolio e risalita, poi 20 s di pausa in cima. Sfalsati di mezzo giro, tra la
+     risalita di un ragnetto e la discesa dell'altro passano circa 6 s */
+  0%, 2% { transform: translate(0, -30px); }
+  12%    { transform: translate(0, var(--giu)); }
+  15%    { transform: translate(-2px, calc(var(--giu) - 5px)); }
+  18%    { transform: translate(2px, var(--giu)); }
+  21%    { transform: translate(-1px, calc(var(--giu) - 3px)); }
+  24%    { transform: translate(0, var(--giu)); }
+  33%, 100% { transform: translate(0, -30px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ragnetto { display: none; }
+}
+
+/* Il ragno grosso (script.js: passaRagno): sempre all'altezza del centro dello schermo, entra da destra di corsa, rallenta e attraversa
+   il centro piano, poi riparte di corsa uscendo a sinistra. Sopra nav e «torna su», sotto i pop-up. Rimosso a fine animazione. Si può schiacciare: il tocco
+   lo prende il disegno (svg), il resto della fascia lascia passare i tocchi. */
+.ragno {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  z-index: 70;
+  width: clamp(230px, 62vw, 340px);
+  color: #120B09;
+  pointer-events: none;
+  transform: translateX(100vw);
+  animation: ragno-attraversa 4.1s linear both;
+}
+.ragno svg { pointer-events: auto; cursor: pointer; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; touch-action: none; position: relative; display: block; transform: translateY(-50%); animation: ragno-ondeggia .14s ease-in-out infinite alternate; width: 100%; height: auto; overflow: visible; filter: drop-shadow(1px 3px 2px rgba(26, 18, 19, .25)); }
+/* Ombra portata sulla pagina: una macchia sfocata sotto il ragno, spostata un po' in basso come con la luce dall'alto */
+.ragno::before {
+  content: "";
+  position: absolute;
+  left: 14%;
+  width: 78%;
+  top: -12%;
+  height: 50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(26, 18, 19, .72), rgba(26, 18, 19, .38) 60%, transparent);
+  filter: blur(6px);
+}
+.ragno__zampa,
+.ragno__palpo { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+.ragno__palpo { stroke-width: 1.6; }
+.ragno__zampa { transform-box: fill-box; }
+.ragno__zampa--su  { transform-origin: 30% 100%; }
+.ragno__zampa--giu { transform-origin: 30% 0; }
+.ragno__zampa--a { animation: ragno-passo .1s ease-in-out infinite alternate; }
+.ragno__zampa--b { animation: ragno-passo .1s ease-in-out -.1s infinite alternate; }
+.ragno__peli { fill: none; stroke: currentColor; stroke-width: .55; stroke-linecap: round; }
+.ragno__giunto { fill: #0E0907; }
+.ragno__segni { fill: none; stroke: rgba(150, 120, 95, .3); stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
+.ragno__punto { fill: rgba(150, 120, 95, .3); }
+.ragno__zanna { fill: none; stroke: #3A0A10; stroke-width: 1.2; stroke-linecap: round; }
+.ragno__solchi { fill: none; stroke: #140D0B; stroke-width: .7; stroke-linecap: round; opacity: .7; }
+.ragno__occhio { fill: #D4142A; }
+/* Tratto lento al centro: passo e vibrazione del corpo più lenti (classe messa da script.js) */
+.ragno--lento .ragno__zampa { animation-duration: .3s; }
+.ragno--lento .ragno__zampa--b { animation-delay: -.3s; }
+.ragno--lento svg { animation-duration: .3s; }
+/* Schiacciato: fermo dov'è (script.js), si appiattisce e svanisce in un attimo, ombra compresa */
+.ragno--schiacciato svg { animation: ragno-schiaccia .18s ease-in both; }
+.ragno--schiacciato::before { opacity: 0; transition: opacity .1s; }
+.ragno--schiacciato .ragno__zampa { animation-play-state: paused; }
+@keyframes ragno-schiaccia {
+  from { transform: translateY(-50%) scale(1, 1); opacity: 1; }
+  to   { transform: translateY(-50%) scale(1.15, .2); opacity: 0; }
+}
+/* La chiazza verde (script.js: disegnaChiazza) resta sulla pagina dove il ragno è stato schiacciato e scorre con il
+   menu; sotto la nav, non riceve tocchi. Compare con un piccolo «splat», resta poco più di un secondo e svanisce:
+   in 2 s è sparita. */
+.chiazza {
+  position: absolute;
+  z-index: 40;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: chiazza-splat .22s cubic-bezier(.3, 1.5, .6, 1) both, chiazza-svanisce .8s ease-in 1.2s forwards;
+}
+.chiazza svg { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 1px 1px rgba(40, 60, 10, .35)); }
+.chiazza__fondo { fill: url(#chiazza-verde); stroke: #3F600E; stroke-width: .8; stroke-opacity: .6; }
+.chiazza__pozza { fill: #B4D94E; opacity: .45; }
+.chiazza__schizzo { fill: #6E9C1C; }
+.chiazza__riflesso { fill: #F4FBE0; opacity: .55; }
+@keyframes chiazza-splat {
+  from { transform: translate(-50%, -50%) scale(.5); opacity: 0; }
+  to   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+@keyframes chiazza-svanisce { to { opacity: 0; } }
+@keyframes ragno-passo {
+  from { transform: rotate(-8deg); }
+  to   { transform: rotate(8deg); }
+}
+@keyframes ragno-ondeggia {
+  from { transform: translateY(calc(-50% - 1px)); }
+  to   { transform: translateY(calc(-50% + 1px)); }
+}
+/* 4,1 s: entra di corsa frenando (0,9 s), attraversa il centro piano (1,6 s), riparte accelerando e esce a sinistra */
+@keyframes ragno-attraversa {
+  0%   { transform: translate(100vw, 0); animation-timing-function: cubic-bezier(.2, .7, .4, 1); }
+  22%  { transform: translate(58vw, -4px); animation-timing-function: linear; }
+  62%  { transform: translate(36vw, 4px); animation-timing-function: cubic-bezier(.6, 0, .9, .5); }
+  100% { transform: translate(calc(-100% - 40px), 10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ragno { display: none; }
+}
+
+/* Sipario d'apertura di Halloween: il logo compare al centro come nel sipario normale (senza il giro), poi un filo di
+   ragnatela «alla Spider-Man» parte dall'alto dello schermo e, quando arriva, si apre una rete a ventaglio larga quanto
+   il logo che ne afferra tutto il lato superiore (come le ragnatele degli angoli). Da lì il filo tira su il logo, che
+   sale dondolando come un pendolo appeso in cima allo schermo, sempre meno; a fine sipario filo e rete svaniscono.
+   Si anima il titolo (h1), portato sopra il velo come il logo, che porta con sé filo (::before) e rete (::after):
+   salita con `transform` (sipario-tira, stessi tempi e curva di sipario-logo: 1.6s, ritardo .1s, salita dal 25%) e
+   dondolio con la proprietà `rotate` (sipario-dondola, curva sua). `rotate` si applica dopo `transform`, quindi il
+   perno resta fisso in cima alla pagina (transform-origin) mentre il logo sale.
+   Misure, logo al suo posto: --colpo-y è il bordo superiore del disegno (al 2% dell'immagine), --rete-h l'altezza della
+   rete fino al bordo (sotto, i fili si biforcano e affondano un poco nel bordo del logo, per sembrare attaccati), con la
+   punta (dove arriva il filo) --rete-h sopra quel bordo; --filo-h va dal bordo alto della pagina alla punta. */
+.tema-halloween:not(.senza-intro) .site-header__logo { animation: none; }
+.tema-halloween:not(.senza-intro) .site-header__title {
+  --intro-dy: calc(50vh - var(--header-pt) - var(--logo-w) * 404 / 1640);
+  --colpo-y: calc(var(--logo-w) * 404 / 820 * .02);
+  --rete-h: calc(var(--logo-w) * .2);
+  --filo-h: calc(var(--header-pt) + var(--colpo-y) - var(--rete-h));
+  position: relative;
+  transform-origin: 50% calc(-1 * var(--header-pt));
+  will-change: transform, rotate;
+  animation: sipario-tira 1.6s linear .1s both, sipario-dondola 1.6s linear .1s both, sipario-sopra 1.8s linear;
+}
+@supports (height: 1dvh) {
+  .tema-halloween:not(.senza-intro) .site-header__title { --intro-dy: calc(50dvh - var(--header-pt) - var(--logo-w) * 404 / 1640); }
+}
+.tema-halloween:not(.senza-intro) .site-header__title::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(var(--colpo-y) - var(--rete-h) - 300vh);
+  width: 2px;
+  margin-left: -1px;
+  height: 300vh; /* finisce sulla punta della rete; la parte in più resta sopra lo schermo */
+  background: linear-gradient(90deg, transparent, var(--brand) 35%, var(--brand) 65%, transparent);
+  will-change: transform;
+  animation: sipario-sparo 1.6s linear .1s both, sipario-filo-luce 1.6s linear .1s both;
+}
+.tema-halloween:not(.senza-intro) .site-header__title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(var(--colpo-y) - var(--rete-h));
+  width: calc(var(--logo-w) * .86); /* il tratto dritto del bordo superiore, senza gli angoli arrotondati */
+  height: calc(var(--rete-h) * 47 / 44); /* i fili finiscono biforcandosi dentro il bordo del logo, per agganciarlo */
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 47' preserveAspectRatio='none' fill='none' stroke='%23731223' stroke-width='.8' stroke-linecap='round'%3E%3Cpath d='M100 0L0 44M0 44L-2.5 47M0 44L2.5 47M100 0L25 44M25 44L22.5 47M25 44L27.5 47M100 0L50 44M50 44L47.5 47M50 44L52.5 47M100 0L75 44M75 44L72.5 47M75 44L77.5 47M100 0L100 44M100 44L97.5 47M100 44L102.5 47M100 0L125 44M125 44L122.5 47M125 44L127.5 47M100 0L150 44M150 44L147.5 47M150 44L152.5 47M100 0L175 44M175 44L172.5 47M175 44L177.5 47M100 0L200 44M200 44L197.5 47M200 44L202.5 47'/%3E%3Cpath d='M70.0 13.2Q76.9 11.6 77.5 13.2Q83.5 11.6 85.0 13.2Q90.1 11.6 92.5 13.2Q96.7 11.6 100.0 13.2Q103.3 11.6 107.5 13.2Q109.9 11.6 115.0 13.2Q116.5 11.6 122.5 13.2Q123.1 11.6 130.0 13.2M40.0 26.4Q53.8 23.2 55.0 26.4Q67.0 23.2 70.0 26.4Q80.2 23.2 85.0 26.4Q93.4 23.2 100.0 26.4Q106.6 23.2 115.0 26.4Q119.8 23.2 130.0 26.4Q133.0 23.2 145.0 26.4Q146.2 23.2 160.0 26.4M8.0 40.5Q29.2 35.6 31.0 40.5Q49.4 35.6 54.0 40.5Q69.6 35.6 77.0 40.5Q89.9 35.6 100.0 40.5Q110.1 35.6 123.0 40.5Q130.4 35.6 146.0 40.5Q150.6 35.6 169.0 40.5Q170.8 35.6 192.0 40.5'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+  transform-origin: 50% 0;
+  pointer-events: none;
+  will-change: transform;
+  animation: sipario-colpo 1.6s linear .1s both, sipario-colpo-luce 1.6s linear .1s both;
+}
+/* Salita del logo (e di filo e rete con lui): fermo al centro fino al 25%, poi su con la curva del sipario normale */
+@keyframes sipario-tira {
+  from      { opacity: 0; transform: translateY(var(--intro-dy)); }
+  12%       { opacity: 1; }
+  25%       { opacity: 1; transform: translateY(var(--intro-dy)); animation-timing-function: cubic-bezier(.6, 0, .2, 1); }
+  to        { opacity: 1; transform: translateY(0); }
+}
+/* Dondolio: fermo finché la rete non lo afferra (24%), poi lo strappo verso l'alto lo fa oscillare, sempre meno */
+@keyframes sipario-dondola {
+  from, 24% { rotate: 0deg; animation-timing-function: ease-out; }
+  34%       { rotate: 5deg; animation-timing-function: ease-in-out; }
+  48%       { rotate: -3.5deg; animation-timing-function: ease-in-out; }
+  62%       { rotate: 2deg; animation-timing-function: ease-in-out; }
+  76%       { rotate: -1deg; animation-timing-function: ease-in-out; }
+  88%       { rotate: .4deg; animation-timing-function: ease-in-out; }
+  to        { rotate: 0deg; }
+}
+/* Il filo: un filo lunghissimo che finisce sulla punta della rete e si muove solo con transform (più fluido). Fermo con
+   la punta sul bordo alto della pagina finché il logo compare, poi scende veloce (12%-19%, frenando) fino alla rete;
+   da lì è fermo rispetto al logo e sale con lui: sembra un filo sparato che poi si accorcia */
+@keyframes sipario-sparo {
+  from, 12% { transform: translateY(calc(-1 * (var(--filo-h) + var(--intro-dy)))); animation-timing-function: cubic-bezier(.2, .7, .3, 1); }
+  19%, to   { transform: translateY(0); }
+}
+/* La rete: si apre dalla punta verso il basso quando il filo arriva, con una curva che sfora appena e rientra */
+@keyframes sipario-colpo {
+  from, 18.5% { transform: translateX(-50%) scale(.08); animation-timing-function: cubic-bezier(.34, 1.45, .64, 1); }
+  24.5%, to   { transform: translateX(-50%) scale(1); }
+}
+/* Visibilità (stessa linea del tempo di sipario-logo): il filo compare quando parte, il colpo quando arriva */
+@keyframes sipario-filo-luce {
+  from, 11.5% { opacity: 0; }
+  12%, 85%    { opacity: .85; }
+  to          { opacity: 0; }
+}
+@keyframes sipario-colpo-luce {
+  from, 18.5% { opacity: 0; }
+  19.5%, 85%  { opacity: .85; }
+  to          { opacity: 0; }
+}
+
+/* Il gatto di Halloween: solo nero, con l'occhio giallo */
+.gatto--nero { color: #1F1517; }
+.gatto--nero .gatto__occhio { fill: #F2C230; }
+/* Toccato, il gatto nero soffia (script.js: gatto--soffia): la schiena si inarca (la gobba sale dal basso e prende il
+   posto della pancia), le zampe si tendono dritte, la coda si gonfia e si drizza, la testa si abbassa un po' */
+.gatto__gobba { display: none; }
+.gatto--soffia .gatto__pancia { display: none; }
+.gatto--soffia .gatto__gobba { display: inline; transform-box: fill-box; transform-origin: 50% 100%; animation: gatto-gobba .18s ease-out both; }
+.gatto--soffia .gatto__zampa { animation: none; transform: scaleY(1.06); }
+.gatto--soffia .gatto__coda { stroke-width: 3.8; animation: gatto-coda-ritta .18s ease-out both; }
+.gatto--soffia circle:not(.gatto__occhio),
+.gatto--soffia polygon:not(.gatto__macchia),
+.gatto--soffia .gatto__occhio { transform: translate(1px, 2.5px); }
+.gatto--soffia .gatto__prrr { font-weight: 600; color: var(--ink); }
+@keyframes gatto-gobba {
+  from { transform: scaleY(.45); }
+  to   { transform: scaleY(1); }
+}
+@keyframes gatto-coda-ritta {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(14deg); }
+}
+
+@media print {
+  .tema-halloween .site-header::before,
+  .tema-halloween .site-header::after,
+  .tema-halloween .site-footer::before,
+  .tema-halloween .site-footer::after,
+  .tema-halloween .site-footer__copy::after,
+  .ragnetto, .ragno, .chiazza { display: none; }
 }

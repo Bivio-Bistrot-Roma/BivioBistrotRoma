@@ -36,13 +36,27 @@
       } catch (e) { /* browser senza Navigation Timing: il sipario si vede a ogni caricamento */ }
     })();
   </script>
+  <!-- Dati del locale caricati subito (non defer, è solo un oggetto di dati): servono qui sotto per decidere il tema a
+       tempo prima del primo disegno, altrimenti il sipario d'apertura partirebbe nella versione normale. -->
+  <script src="../assets/locale-dati.js?v=20261027b"></script>
+  <!-- Tema a tempo (oggi solo "halloween"): `meta.tema` in locale-dati.js; ?tema=halloween per provare, ?tema=off per
+       spegnere. Mette la classe tema-<nome> su <html>; script.js e style.css la leggono da lì. -->
+  <script>
+    (function () {
+      try {
+        var tema = (window.BIVIO_LOCALE && window.BIVIO_LOCALE.meta.tema) || "";
+        var m = /[?&]tema=([a-z]+)/.exec(location.search);
+        if (m) tema = m[1] === "off" ? "" : m[1];
+        if (tema) document.documentElement.classList.add("tema-" + tema);
+      } catch (e) { /* niente tema */ }
+    })();
+  </script>
   <link rel="stylesheet" href="../assets/base.css?v=20261015">
-  <link rel="stylesheet" href="style.css?v=20261016d">
+  <link rel="stylesheet" href="style.css?v=20261027c">
   <!-- Script classici (no moduli): funziona anche da file:// — l'ordine conta -->
-  <script defer src="../assets/locale-dati.js?v=20261015g"></script>
   <script defer src="../assets/comune.js?v=20261015b"></script>
   <script defer src="menu-data.js?v=20261015c"></script>
-  <script defer src="script.js?v=20261016c"></script>
+  <script defer src="script.js?v=20261027c"></script>
 </head>
 <body>
   <a class="skip-link" href="#menu" data-i18n="skip">Vai al menu</a>
@@ -75,7 +89,7 @@
     <p class="site-header__overline">Roma</p>
     <!-- Bordo inferiore dell'intestazione: onda + bollicine (perlage), decorativo -->
     <div class="onda" aria-hidden="true">
-      <span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span>
+      <span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span><span class="onda__bolla"></span>
       <svg class="onda__svg" viewBox="0 0 1200 40" preserveAspectRatio="none" focusable="false"><path d="M0 24C100 10 200 5 320 7C500 10 620 34 820 32C960 30 1100 20 1200 14V40H0Z"/></svg>
     </div>
   </header>
