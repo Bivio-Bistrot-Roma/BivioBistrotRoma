@@ -2107,7 +2107,7 @@
   // secondo piano) o c'è un pop-up aperto, aspetta che la scheda torni visibile o che il pop-up si chiuda, e passa
   // poco dopo: così la probabilità è quella vera per chi guarda il menu.
   // Solo decorativo (aria-hidden); con il movimento ridotto non c'è. ?ragno=1 (solo debug) lo fa passare sempre.
-  var RAGNO_PROBABILITA = 0.66;
+  var RAGNO_PROBABILITA = 0.85;
   var RAGNO_CHIAVE = "bivio-ragno";
 
   /** Il ragno visto dall'alto, rivolto a sinistra, sul modello di un ragno lupo ma cattivo: zampe lunghe e spigolose,
@@ -2323,7 +2323,7 @@
       } catch (e) { /* storage bloccato: vale il solo tiro di dado */ }
       if (Math.random() > RAGNO_PROBABILITA) return;
     }
-    window.setTimeout(passaRagno, sempre ? 1500 : 5000 + Math.random() * 10000);
+    window.setTimeout(passaRagno, sempre ? 1500 : 8000 + Math.random() * 12000);
   }
 
   lang = detectLanguage();
