@@ -63,7 +63,7 @@
     "alex.1": "A Roman, a mixologist and a keen observer of people, Alex has a special talent: catching people's attention, creating connections and turning a simple moment at the bar into an experience to remember.",
     "alex.2": "With his charisma and his passion for mixology, he approaches the world of cocktails with creativity and personality, taking care of every detail, from the ingredients to the balance of flavours to the presentation.",
     "alex.3": "But what truly sets him apart is his ability to connect with whoever is in front of him. Alex knows how to read people, spark their curiosity and draw them in, putting them at ease naturally and with that touch of irony that makes every encounter special.",
-    "alex.4": "Agata's business partner, he shares her vision of a place where food, conviviality and hospitality come together in a single experience. For Alex, a cocktail is not just a mix of ingredients but a way to tell something, to surprise and to leave a mark.",
+    "alex.4": "For Alex, a cocktail is not just a mix of ingredients but a way to tell something, to surprise and to leave a mark.",
     "alex.5": "His speciality? Creating cocktails people remember and moments they want to live again.",
 
     "locale.titolo": "The place",
