@@ -124,7 +124,8 @@ html.is-modal-open body { padding-right: var(--barra, 0px); }
   gap: 12px;
   padding: max(16px, env(safe-area-inset-top, 0px)) var(--gutter) 0;
 }
-.hero__centro { max-width: 40rem; }
+/* Larghezza piena (fino a 40rem): senza, il blocco si stringe sulla frase e in inglese, più corta, i pulsanti vanno a capo */
+.hero__centro { width: 100%; max-width: 40rem; }
 .hero__titolo { line-height: 0; }
 .hero__logo {
   width: clamp(230px, 62vw, 440px);
