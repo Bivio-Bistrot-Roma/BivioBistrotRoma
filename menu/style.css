@@ -1450,6 +1450,15 @@ a.titoli__voce:hover { color: var(--ink); }
   transition: border-color .2s var(--ease);
 }
 .site-footer__contacts a:hover { border-bottom-color: var(--accent); }
+/* Link al sito del locale, sotto i contatti */
+.site-footer__sito { margin-bottom: 1rem; }
+.site-footer__sito a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  transition: border-color .2s var(--ease);
+}
+.site-footer__sito a:hover { border-bottom-color: var(--accent); }
 .site-footer__legal {
   margin-top: .6rem;
   font-size: .75rem;

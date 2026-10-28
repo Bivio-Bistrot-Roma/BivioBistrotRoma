@@ -1,0 +1,13 @@
+// Configurazione di Cloudflare Workers: il sito è statico, si pubblica la radice della repo così com'è.
+// Cosa NON pubblicare sta in .assetsignore. "name" deve restare uguale al nome del Worker nel pannello Cloudflare.
+{
+  "name": "biviobistrotroma",
+  "compatibility_date": "2026-10-23",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": ".",
+    "html_handling": "auto-trailing-slash"
+  }
+}

@@ -3,15 +3,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- ANTEPRIMA: finché il sito del locale non è approvato, chi apre l'indirizzo principale va dritto al menu.
-       La pagina si vede solo con ?anteprima=sito (parametri e hash passano comunque al menu).
-       AL LANCIO: togliere questo script e il meta robots "noindex" qui sotto. -->
-  <script>
-    if (!/[?&]anteprima=sito(&|$)/.test(location.search)) {
-      location.replace((location.protocol === "file:" ? "menu/index.html" : "menu/") + location.search + location.hash);
-    }
-  </script>
-  <meta name="robots" content="noindex">
   <!-- Sipario d'apertura (gemello di quello del menu): si vede a ogni apertura del sito, ma non quando la pagina viene
        ricaricata, ci si torna con avanti/indietro o l'indirizzo ha un hash. ?intro=1 (solo debug) lo fa ripartire sempre. -->
   <script>
@@ -27,16 +18,16 @@
   <title data-i18n="meta.title">Bivio Bistrot — Roma</title>
   <meta name="description" data-i18n-content="meta.description" content="Bivio Bistrot, bistrot a Roma in Piazza Monte Grappa (Prati): cucina di stagione con radici siciliane, colazione al mattino, vini e cocktail fino a tardi.">
   <!-- SEO: anteprime social (Open Graph, Twitter) e dati strutturati (JSON-LD) per i motori di ricerca.
-       AL LANCIO: sostituire DOMINIO-DA-DEFINIRE con il dominio vero (qui, nel canonical e nel JSON-LD). -->
-  <link rel="canonical" href="https://DOMINIO-DA-DEFINIRE/">
+       Gli URL sono assoluti (https://biviobistrot.it/...): se cambia il dominio, aggiornali qui, nel canonical e nel JSON-LD. -->
+  <link rel="canonical" href="https://biviobistrot.it/">
   <meta property="og:type" content="restaurant">
   <meta property="og:site_name" content="Bivio Bistrot">
   <meta property="og:title" content="Bivio Bistrot — Roma">
   <meta property="og:description" content="Bivio Bistrot, bistrot a Roma in Piazza Monte Grappa (Prati): cucina di stagione con radici siciliane, colazione al mattino, vini e cocktail fino a tardi.">
   <meta property="og:locale" content="it_IT">
   <meta property="og:locale:alternate" content="en_GB">
-  <meta property="og:url" content="https://DOMINIO-DA-DEFINIRE/">
-  <meta property="og:image" content="https://DOMINIO-DA-DEFINIRE/assets/brand/og-image.jpg">
+  <meta property="og:url" content="https://biviobistrot.it/">
+  <meta property="og:image" content="https://biviobistrot.it/assets/brand/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Bivio Bistrot, bistrot a Roma in Piazza Monte Grappa">
@@ -49,14 +40,14 @@
     "@context": "https://schema.org",
     "@type": "Restaurant",
     "name": "Bivio Bistrot",
-    "url": "https://DOMINIO-DA-DEFINIRE/",
+    "url": "https://biviobistrot.it/",
     "image": [
-      "https://DOMINIO-DA-DEFINIRE/assets/brand/og-image.jpg",
-      "https://DOMINIO-DA-DEFINIRE/assets/images/locale/web/interni-tavoli-al-buio-1600.jpg",
-      "https://DOMINIO-DA-DEFINIRE/assets/images/locale/web/esterni-terrazzino-1600.jpg",
-      "https://DOMINIO-DA-DEFINIRE/assets/images/locale/web/interni-cucina-a-vista-1600.jpg"
+      "https://biviobistrot.it/assets/brand/og-image.jpg",
+      "https://biviobistrot.it/assets/images/locale/web/interni-tavoli-al-buio-1600.jpg",
+      "https://biviobistrot.it/assets/images/locale/web/esterni-terrazzino-1600.jpg",
+      "https://biviobistrot.it/assets/images/locale/web/interni-cucina-a-vista-1600.jpg"
     ],
-    "logo": "https://DOMINIO-DA-DEFINIRE/assets/brand/logo.png",
+    "logo": "https://biviobistrot.it/assets/brand/logo.png",
     "telephone": "+39 378 067 0878",
     "address": {
       "@type": "PostalAddress",
@@ -81,7 +72,7 @@
     ],
     "servesCuisine": ["Italiana", "Siciliana"],
     "priceRange": "€€",
-    "hasMenu": "https://DOMINIO-DA-DEFINIRE/menu/",
+    "hasMenu": "https://biviobistrot.it/menu/",
     "acceptsReservations": true,
     "potentialAction": {
       "@type": "ReserveAction",
@@ -101,10 +92,10 @@
   <link rel="stylesheet" href="locale.css?v=20261016q">
   <!-- Script classici (no moduli): funziona anche da file:// — l'ordine conta.
        menu/menu-data.js serve per le stringhe in comune col menu. -->
-  <script defer src="assets/locale-dati.js?v=20261027b"></script>
+  <script defer src="assets/locale-dati.js?v=20261028"></script>
   <script defer src="assets/comune.js?v=20261015b"></script>
   <script defer src="assets/galleria.js?v=20261015"></script>
-  <script defer src="menu/menu-data.js?v=20261015c"></script>
+  <script defer src="menu/menu-data.js?v=20261028"></script>
   <script defer src="locale.js?v=20261016i"></script>
 </head>
 <body>

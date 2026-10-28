@@ -1574,6 +1574,12 @@
         a.setAttribute("title", t("comingSoon"));
       }
     });
+    // Da file:// una cartella non apre il suo index.html: il link al sito del locale punta al file
+    if (location.protocol === "file:") {
+      Array.prototype.forEach.call(document.querySelectorAll("[data-link-sito]"), function (a) {
+        a.setAttribute("href", "../index.html");
+      });
+    }
   }
 
   // ---------------------------------------------------------------- Orari: rendering (pill header + footer)

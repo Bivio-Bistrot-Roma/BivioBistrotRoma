@@ -1,0 +1,13 @@
+# File che Cloudflare NON deve pubblicare (stessa sintassi di .gitignore).
+# La cartella pubblicata è la radice della repo (vedi wrangler.jsonc): qui si escludono gli strumenti di lavoro.
+.git
+.gitignore
+.assetsignore
+.vscode
+wrangler.jsonc
+tools
+documenti
+__pycache__
+node_modules
+*.md
+*.py

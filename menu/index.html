@@ -6,6 +6,21 @@
   <title>Menu — Bivio Bistrot Roma</title>
   <meta name="description" data-i18n-content="description" content="Il menu di Bivio Bistrot a Roma: cucina di stagione, carta dei vini e distillati.">
   <meta name="theme-color" content="#FEE2B3">
+  <!-- Anteprima del link (WhatsApp, social) e indirizzo ufficiale: URL assoluti, se cambia il dominio aggiornali qui
+       e in ../index.html. -->
+  <link rel="canonical" href="https://biviobistrot.it/menu/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Bivio Bistrot">
+  <meta property="og:title" content="Menu — Bivio Bistrot Roma">
+  <meta property="og:description" content="Il menu di Bivio Bistrot a Roma: cucina di stagione, carta dei vini e distillati.">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:locale:alternate" content="en_GB">
+  <meta property="og:url" content="https://biviobistrot.it/menu/">
+  <meta property="og:image" content="https://biviobistrot.it/assets/brand/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Bivio Bistrot, bistrot a Roma in Piazza Monte Grappa">
+  <meta name="twitter:card" content="summary_large_image">
 
   <!-- Favicon: la "B" del logo -->
   <link rel="icon" type="image/png" href="../assets/brand/favicon.png">
@@ -38,7 +53,7 @@
   </script>
   <!-- Dati del locale caricati subito (non defer, è solo un oggetto di dati): servono qui sotto per decidere il tema a
        tempo prima del primo disegno, altrimenti il sipario d'apertura partirebbe nella versione normale. -->
-  <script src="../assets/locale-dati.js?v=20261027b"></script>
+  <script src="../assets/locale-dati.js?v=20261028"></script>
   <!-- Tema a tempo (oggi solo "halloween"): `meta.tema` in locale-dati.js; ?tema=halloween per provare, ?tema=off per
        spegnere. Mette la classe tema-<nome> su <html>; script.js e style.css la leggono da lì. -->
   <script>
@@ -52,11 +67,11 @@
     })();
   </script>
   <link rel="stylesheet" href="../assets/base.css?v=20261015">
-  <link rel="stylesheet" href="style.css?v=20261027c">
+  <link rel="stylesheet" href="style.css?v=20261028">
   <!-- Script classici (no moduli): funziona anche da file:// — l'ordine conta -->
   <script defer src="../assets/comune.js?v=20261015b"></script>
-  <script defer src="menu-data.js?v=20261015c"></script>
-  <script defer src="script.js?v=20261027e"></script>
+  <script defer src="menu-data.js?v=20261028"></script>
+  <script defer src="script.js?v=20261028"></script>
 </head>
 <body>
   <a class="skip-link" href="#menu" data-i18n="skip">Vai al menu</a>
@@ -112,6 +127,8 @@
       <a data-link="maps" data-meta="address" target="_blank" rel="noopener noreferrer">Piazza Monte Grappa, 1b, 00195 Roma</a>
       <a data-meta="phone" href="tel:+393780670878">+39 378 067 0878</a>
     </address>
+    <!-- Link al sito del locale (da file:// script.js lo fa puntare a ../index.html) -->
+    <p class="site-footer__sito"><a href="../" data-link-sito data-i18n="siteLink">Scopri il locale</a></p>
     <!-- Senza JavaScript resta questa frase; script.js la sostituisce con quella che contiene il link al pop-up allergeni -->
     <p class="site-footer__allergeni">Per allergie e intolleranze chiedi al nostro personale.</p>
     <p class="site-footer__legal" hidden></p>
