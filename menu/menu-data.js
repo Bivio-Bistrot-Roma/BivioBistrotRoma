@@ -360,7 +360,7 @@ window.BIVIO_MENU = Object.freeze({
     { id: "barbera-asti", name: "Barbera d'Asti", winery: "Bricco dei Guazzi", detail: null, vintage: null, abv: 14, organic: false, bottlePrice: 35, glassPrice: 8, category: "rossi" },
 
     // --- Rosé
-    { id: "bandolo-matassa", name: "Bandolo della Matassa", winery: "Cantina Le Macchie", detail: null, vintage: null, abv: 13, organic: false, bottlePrice: 30, glassPrice: 12, category: "rose" },
+    { id: "bandolo-matassa", name: "Bandolo della Matassa", winery: "Cantina Le Macchie", detail: null, vintage: null, abv: 13, organic: false, bottlePrice: 40, glassPrice: 12, category: "rose" },
 
     // --- Prosecco DOC
     { id: "v8-valdobbiadene", name: "V8 Valdobbiadene Superiore Extra Dry", winery: "Metodo Martinelli", detail: null, vintage: null, abv: 11, organic: false, bottlePrice: 40, glassPrice: 8, category: "prosecco" },
