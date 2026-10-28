@@ -350,22 +350,22 @@ window.BIVIO_MENU = Object.freeze({
   // -------------------------------------------------------------------- VINI
   wines: [
     // --- Bianchi
-    { id: "traminer", name: "Traminer", winery: "Torre Rosazza", detail: null, vintage: null, abv: 12, organic: false, bottlePrice: 40, glassPrice: 8, category: "bianchi" },
-    { id: "pecorino", name: "Pecorino", winery: "Tenuta Tre Gemme", detail: null, vintage: null, abv: 13, organic: true, bottlePrice: 45, glassPrice: 8, category: "bianchi" },
-    { id: "ribolla-gialla", name: "Ribolla Gialla", winery: "Torre Rosazza", detail: null, vintage: null, abv: 13, organic: false, bottlePrice: 45, glassPrice: 8, category: "bianchi" },
-    { id: "gavi", name: "Gavi", winery: "Bricco dei Guazzi", detail: null, vintage: null, abv: 12.5, organic: false, bottlePrice: 45, glassPrice: 8, category: "bianchi" },
+    { id: "traminer", name: "Traminer", winery: "Torre Rosazza", detail: null, vintage: null, abv: 12, organic: false, bottlePrice: 30, glassPrice: 8, category: "bianchi" },
+    { id: "pecorino", name: "Pecorino", winery: "Tenuta Tre Gemme", detail: null, vintage: null, abv: 13, organic: true, bottlePrice: 35, glassPrice: 8, category: "bianchi" },
+    { id: "ribolla-gialla", name: "Ribolla Gialla", winery: "Torre Rosazza", detail: null, vintage: null, abv: 13, organic: false, bottlePrice: 35, glassPrice: 8, category: "bianchi" },
+    { id: "gavi", name: "Gavi", winery: "Bricco dei Guazzi", detail: null, vintage: null, abv: 12.5, organic: false, bottlePrice: 35, glassPrice: 8, category: "bianchi" },
 
     // --- Rossi
-    { id: "valpolicella", name: "Valpolicella", winery: "Costa Arente", detail: "Valpantena Superiore", vintage: "2021", abv: 13.5, organic: false, bottlePrice: 45, glassPrice: 8, category: "rossi" },
-    { id: "barbera-asti", name: "Barbera d'Asti", winery: "Bricco dei Guazzi", detail: null, vintage: null, abv: 14, organic: false, bottlePrice: 50, glassPrice: 8, category: "rossi" },
+    { id: "valpolicella", name: "Valpolicella", winery: "Costa Arente", detail: "Valpantena Superiore", vintage: "2021", abv: 13.5, organic: false, bottlePrice: 40, glassPrice: 8, category: "rossi" },
+    { id: "barbera-asti", name: "Barbera d'Asti", winery: "Bricco dei Guazzi", detail: null, vintage: null, abv: 14, organic: false, bottlePrice: 35, glassPrice: 8, category: "rossi" },
 
     // --- Rosé
-    { id: "bandolo-matassa", name: "Bandolo della Matassa", winery: "Cantina Le Macchie", detail: null, vintage: null, abv: 13, organic: false, bottlePrice: 55, glassPrice: 12, category: "rose" },
+    { id: "bandolo-matassa", name: "Bandolo della Matassa", winery: "Cantina Le Macchie", detail: null, vintage: null, abv: 13, organic: false, bottlePrice: 30, glassPrice: 12, category: "rose" },
 
     // --- Prosecco DOC
-    { id: "v8-valdobbiadene", name: "V8 Valdobbiadene Superiore Extra Dry", winery: "Metodo Martinelli", detail: null, vintage: null, abv: 11, organic: false, bottlePrice: 55, glassPrice: 8, category: "prosecco" },
-    { id: "v8-extra-dry", name: "V8 Extra Dry", winery: null, detail: null, vintage: null, abv: 11, organic: false, bottlePrice: 50, glassPrice: 8, category: "prosecco" },
-    { id: "v8-brut", name: "V8 Brut", winery: null, detail: null, vintage: null, abv: 11, organic: false, bottlePrice: 45, glassPrice: 8, category: "prosecco" },
+    { id: "v8-valdobbiadene", name: "V8 Valdobbiadene Superiore Extra Dry", winery: "Metodo Martinelli", detail: null, vintage: null, abv: 11, organic: false, bottlePrice: 40, glassPrice: 8, category: "prosecco" },
+    { id: "v8-extra-dry", name: "V8 Extra Dry", winery: null, detail: null, vintage: null, abv: 11, organic: false, bottlePrice: 30, glassPrice: 8, category: "prosecco" },
+    { id: "v8-brut", name: "V8 Brut", winery: null, detail: null, vintage: null, abv: 11, organic: false, bottlePrice: 30, glassPrice: 8, category: "prosecco" },
 
     // --- Bollicine
     { id: "franciacorta-barone", name: "Franciacorta", winery: "Barone di Erbusco", detail: null, vintage: null, abv: 12.5, organic: false, bottlePrice: 65, glassPrice: 15, category: "bollicine" },
