@@ -1,0 +1,17 @@
+# Link di tracciamento: ogni canale ha il suo indirizzo, che porta subito alla pagina giusta.
+# Cloudflare conta le aperture di ciascun percorso (il cruscotto le legge).
+# 302 (temporaneo) e non 301: con il 301 il telefono ricorda la destinazione e le scansioni successive non verrebbero contate.
+
+# QR code stampati (tavoli, vetrina…)
+/qr /menu/ 302
+/qr/ /menu/ 302
+
+# Google Maps: campo «Sito web» e campo «Menu» della scheda
+/maps / 302
+/maps/ / 302
+/maps-menu /menu/ 302
+/maps-menu/ /menu/ 302
+
+# Instagram: link nella bio
+/ig / 302
+/ig/ / 302
