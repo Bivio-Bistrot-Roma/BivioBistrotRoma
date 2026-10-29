@@ -337,7 +337,8 @@ html.is-modal-open body { padding-right: var(--barra, 0px); }
 .stato--chiaro.is-aperto::before { background: #5E8F78; box-shadow: 0 0 0 3px rgba(94, 143, 120, .18); }
 
 /* ---------- Lingua ---------- */
-.lingua { display: flex; gap: 2px; }
+/* Sempre a destra: la pillola dello stato compare dopo (la mostra lo script) e non deve spostarla */
+.lingua { display: flex; gap: 2px; margin-left: auto; }
 .lingua__voce {
   min-width: 44px;
   min-height: 44px;
