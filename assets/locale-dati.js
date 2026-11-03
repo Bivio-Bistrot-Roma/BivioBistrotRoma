@@ -52,7 +52,7 @@ window.BIVIO_LOCALE = Object.freeze({
       { open: "07:30", close: "23:00" }, // mar
       { open: "07:30", close: "23:00" }, // mer
       { open: "07:30", close: "00:00" }, // gio
-      { open: "07:30", close: "01:00" }, // ven
+      { open: "08:30", close: "01:00" }, // ven
       { open: "11:30", close: "02:00" }, // sab
       { open: "11:30", close: "22:00" }  // dom
     ],

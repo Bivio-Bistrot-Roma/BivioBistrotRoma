@@ -33,7 +33,7 @@
   <meta property="og:image:alt" content="Bivio Bistrot, bistrot a Roma in Piazza Monte Grappa">
   <meta name="twitter:card" content="summary_large_image">
   <!-- Orari in openingHoursSpecification: ricavati da meta.hours in assets/locale-dati.js (aggiornare insieme).
-       Quando "closes" è minore di "opens" (es. venerdì 07:30-01:00) il locale chiude dopo mezzanotte,
+       Quando "closes" è minore di "opens" (es. venerdì 08:30-01:00) il locale chiude dopo mezzanotte,
        il giorno dopo: schema.org lo accetta così. "00:00" = chiusura a mezzanotte. -->
   <script type="application/ld+json">
   {
@@ -66,7 +66,7 @@
       { "@type": "OpeningHoursSpecification", "dayOfWeek": "Monday", "opens": "07:30", "closes": "22:00" },
       { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Tuesday", "Wednesday"], "opens": "07:30", "closes": "23:00" },
       { "@type": "OpeningHoursSpecification", "dayOfWeek": "Thursday", "opens": "07:30", "closes": "00:00" },
-      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "07:30", "closes": "01:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "08:30", "closes": "01:00" },
       { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "11:30", "closes": "02:00" },
       { "@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "11:30", "closes": "22:00" }
     ],
@@ -93,7 +93,7 @@
   <link rel="stylesheet" href="locale.css?v=20261029">
   <!-- Script classici (no moduli): funziona anche da file:// — l'ordine conta.
        menu/menu-data.js serve per le stringhe in comune col menu. -->
-  <script defer src="assets/locale-dati.js?v=20261102"></script>
+  <script defer src="assets/locale-dati.js?v=20261103"></script>
   <script defer src="assets/comune.js?v=20261015b"></script>
   <script defer src="assets/galleria.js?v=20261015"></script>
   <script defer src="menu/menu-data.js?v=20261028"></script>
