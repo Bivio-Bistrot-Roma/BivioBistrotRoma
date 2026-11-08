@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prova tema Natale</title>
+<!-- Pagina di lavoro, non pubblicata (tools/ è in .assetsignore). Si apre dal server locale, dalla radice della repo:
+     python -m http.server 8000  →  http://localhost:8000/tools/prova-natale.html
+     Ogni riquadro è il menu vero con il tema Natale forzato (?tema=natale). -->
+<style>
+  :root { --crema: #FEE2B3; --carta: #FDF3E3; --bordeaux: #731223; --inchiostro: #2A1216; --tenue: #7A5A55; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--carta); color: var(--inchiostro); font: 15px/1.5 system-ui, sans-serif; }
+  header { padding: 24px 16px 8px; max-width: 1300px; margin: 0 auto; }
+  h1 { margin: 0 0 4px; color: var(--bordeaux); font-size: 1.6rem; }
+  h2 { margin: 32px 0 4px; color: var(--bordeaux); font-size: 1.2rem; }
+  p { margin: 0 0 8px; color: var(--tenue); max-width: 70ch; }
+  main { padding: 0 16px 48px; max-width: 1300px; margin: 0 auto; }
+  .fila { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 12px; }
+  .telefono { display: flex; flex-direction: column; gap: 8px; width: 390px; max-width: 100%; }
+  .telefono__testa { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .telefono__nome { font-weight: 600; }
+  .telefono__nota { font-size: .85rem; color: var(--tenue); min-height: 2.6em; }
+  iframe { width: 390px; max-width: 100%; height: 760px; border: 1px solid #E5CFA8; border-radius: 28px; background: #fff; box-shadow: 0 8px 24px rgba(42, 18, 22, .08); }
+  .azioni { display: flex; gap: 6px; }
+  button, a.bottone { white-space: nowrap; font: inherit; font-size: .85rem; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--bordeaux); background: #fff; color: var(--bordeaux); cursor: pointer; text-decoration: none; }
+  button:hover, a.bottone:hover { background: var(--bordeaux); color: #fff; }
+  .scelta { display: inline-block; padding: 2px 8px; border-radius: 6px; background: var(--crema); color: var(--bordeaux); font-weight: 600; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Tema Natale: prova</h1>
+  <p>Ogni riquadro è il menu vero, con il tema Natale acceso solo qui (online resta spento). «Rivedi» ricarica il
+  riquadro e fa ripartire il sipario d'apertura. Il festone di luci in alto, il cappello sul logo, la nevicata
+  d'apertura, i fiocchi di neve e la stellina nel footer sono uguali in tutti i riquadri.</p>
+</header>
+<main>
+  <h2>1. Apertura e intestazione</h2>
+  <p>Il sipario dura meno di due secondi: usa «Rivedi» più volte, oppure «Lento» per guardarlo con calma.</p>
+  <div class="fila" data-fila="avvio"></div>
+
+  <h2>2. Le sorprese</h2>
+  <p>Qui sono forzate. Online la cometa passa al massimo una volta per visita, una volta su due, e il gatto una volta su cinque.</p>
+  <div class="fila" data-fila="altro"></div>
+</main>
+<script>
+  var BASE = "../menu/index.html?tema=natale&lang=it";
+  var RIQUADRI = {
+    avvio: [
+      { nome: "Il tema", q: "", nota: "Sul velo color crema nevica; il logo, con il cappello, fa il suo giro e sale al suo posto. Sotto il logo scendono i fiocchi di neve." }
+    ],
+    altro: [
+      { nome: "La cometa", q: "&cometa=1", nota: "Passa dopo un secondo e mezzo. Toccala: si apre in stelline. «Rivedi» per farla ripassare." },
+      { nome: "Il gatto con la sciarpa", q: "&gatto=1", nota: "Scorri fino in fondo alla pagina: passa sulla riga del footer. Toccalo." },
+      { nome: "Senza tema (com'è oggi)", q: "", nota: "Per confronto.", senzaTema: true }
+    ]
+  };
+  Object.keys(RIQUADRI).forEach(function (fila) {
+    var contenitore = document.querySelector('[data-fila="' + fila + '"]');
+    RIQUADRI[fila].forEach(function (r) {
+      var src = (r.senzaTema ? "../menu/index.html?tema=off&lang=it" : BASE + r.q) + "&intro=1";
+      var box = document.createElement("div");
+      box.className = "telefono";
+      var testa = document.createElement("div");
+      testa.className = "telefono__testa";
+      var nome = document.createElement("span");
+      nome.className = "telefono__nome";
+      nome.textContent = r.nome;
+      var azioni = document.createElement("div");
+      azioni.className = "azioni";
+      var frame = document.createElement("iframe");
+      frame.title = r.nome;
+      frame.src = src;
+      function carica(extra) { frame.src = src + extra + "&r=" + Date.now(); }
+      var rivedi = document.createElement("button");
+      rivedi.type = "button";
+      rivedi.textContent = "Rivedi";
+      rivedi.addEventListener("click", function () { carica(""); });
+      azioni.appendChild(rivedi);
+      if (fila === "avvio") {
+        var lento = document.createElement("button");
+        lento.type = "button";
+        lento.textContent = "Lento";
+        lento.addEventListener("click", function () { carica("&lento=4"); });
+        azioni.appendChild(lento);
+      }
+      var apri = document.createElement("a");
+      apri.className = "bottone";
+      apri.href = src;
+      apri.target = "_blank";
+      apri.rel = "noopener";
+      apri.textContent = "Apri";
+      azioni.appendChild(apri);
+      testa.appendChild(nome);
+      testa.appendChild(azioni);
+      var nota = document.createElement("div");
+      nota.className = "telefono__nota";
+      nota.textContent = r.nota;
+      box.appendChild(testa);
+      box.appendChild(nota);
+      box.appendChild(frame);
+      contenitore.appendChild(box);
+    });
+  });
+</script>
+</body>
+</html>

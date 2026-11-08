@@ -1985,7 +1985,7 @@
   // Ogni tanto (una volta su cinque che il footer entra a schermo, al massimo una volta per visita) un gattino
   // attraversa il footer camminando sulla sua riga in alto. Toccato, si ferma e fa le fusa, poi scappa via.
   // Il mantello è scelto a caso tra quelli di MANTELLI (mai nero: porta sfortuna). Un tema può cambiare mantelli,
-  // probabilità, disegno e reazione al tocco (temaGatto: mantelli, probabilita, disegna, verso, classeTocco).
+  // probabilità, disegno e reazione al tocco (temaGatto: mantelli, probabilita, disegna, disegnaSopra, verso, classeTocco).
   // Solo decorativo (aria-hidden); con il movimento ridotto non passa. ?gatto=1 (solo debug) lo fa passare sempre.
   var footerEl = document.querySelector(".site-footer");
   var gattoSempre = false;
@@ -2013,6 +2013,8 @@
     corpo.appendChild(svg("polygon", { class: "gatto__macchia", points: "36.5,6 40,2 40.8,8.5" }));
     corpo.appendChild(svg("path", { class: "gatto__strisce", d: "M17 10.6q1 2.4 0 4.2M21 10.1q1 2.5 0 4.6M25 10.6q1 2.4 0 4.2M35.4 6.2l.3 2.2" }));
     corpo.appendChild(svg("circle", { class: "gatto__occhio", cx: 38.3, cy: 10, r: 0.9 }));
+    // Disegno in più del tema sopra tutto il resto (es. la sciarpa di Natale)
+    if (temaGatto.disegnaSopra) temaGatto.disegnaSopra(corpo, svg);
     var disegno = svg("svg", { viewBox: "0 0 48 30", width: 48, height: 30, focusable: "false" });
     disegno.appendChild(corpo);
     return disegno;
@@ -2029,11 +2031,17 @@
       if (e.animationName === "gatto-cammina" && strada.parentNode) strada.parentNode.removeChild(strada);
     });
     // Toccato: si ferma, vibra e fa «prrr», poi scappa via di corsa dalla parte verso cui guarda. Un tema può
-    // cambiare il verso (temaGatto.verso) e aggiungere una classe per il tempo della reazione (temaGatto.classeTocco)
+    // cambiare il verso (temaGatto.verso: una stringa, o una funzione che riceve la lingua e la restituisce) e
+    // aggiungere una classe per il tempo della reazione (temaGatto.classeTocco)
     gatto.addEventListener("click", function () {
       if (gatto.classList.contains("gatto--fusa") || gatto.classList.contains("gatto--scappa")) return;
-      var fusa = el("span", { class: "gatto__prrr", text: temaGatto.verso || "prrr" });
+      var verso = typeof temaGatto.verso === "function" ? temaGatto.verso(lang) : temaGatto.verso;
+      var fusa = el("span", { class: "gatto__prrr", text: verso || "prrr" });
       gatto.appendChild(fusa);
+      // Un verso lungo, con il gatto vicino al bordo, uscirebbe dalla strada (che taglia): lo si sposta verso l'interno
+      var box = fusa.getBoundingClientRect(), bordi = strada.getBoundingClientRect(), margine = 8;
+      var sposta = Math.max(0, bordi.left + margine - box.left) - Math.max(0, box.right - (bordi.right - margine));
+      if (sposta) fusa.style.marginLeft = Math.round(sposta) + "px";
       gatto.classList.add("gatto--fusa");
       if (temaGatto.classeTocco) gatto.classList.add(temaGatto.classeTocco);
       window.setTimeout(function () {

@@ -1,0 +1,240 @@
+/* ---------- Tema Natale ---------- */
+/* Caricato solo con il tema acceso: `meta.tema: "natale"` in assets/locale-dati.js (o ?tema=natale per provare,
+   ?tema=off per spegnere). Lo carica lo script in testa a menu/index.html, dopo style.css, e mette la classe
+   `tema-natale` su <html>. Il comportamento sta in natale.js. Natale elegante, sui colori del locale più l'oro:
+   un festone di luci lungo il bordo in alto dell'intestazione, una stellina nel footer, una cometa che ogni tanto attraversa lo schermo (toccata, si apre in
+   stelline), il gatto del footer con la sciarpa, un cappello di Babbo Natale sul logo, la nevicata nel sipario
+   d'apertura, fiocchi di neve al posto delle bollicine. Solo decorazione. */
+.tema-natale {
+  --nt-oro: #B8893B;
+  --nt-luce: #F2C14E;
+  --nt-abete: #2F4A35;
+  --nt-fiocco: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-10 -10 20 20'%3E%3Cdefs%3E%3Cpath id='a' d='M0 0V-8.4M-2.3-6.9L0-4.9L2.3-6.9M-1.6-3.3L0-2.1L1.6-3.3'/%3E%3Cg id='f'%3E%3Cuse href='%23a'/%3E%3Cuse href='%23a' transform='rotate(60)'/%3E%3Cuse href='%23a' transform='rotate(120)'/%3E%3Cuse href='%23a' transform='rotate(180)'/%3E%3Cuse href='%23a' transform='rotate(240)'/%3E%3Cuse href='%23a' transform='rotate(300)'/%3E%3C/g%3E%3Cg id='k' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cuse href='%23f' stroke='%23731223' stroke-opacity='.35' stroke-width='2.6'/%3E%3Cuse href='%23f' stroke='%23fff' stroke-width='1.2'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23k'/%3E%3C/svg%3E");
+  --nt-stella: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-10 -10 20 20'%3E%3Cpath d='M0 -9.5Q1.235 -1.235 9.5 0Q1.235 1.235 0 9.5Q-1.235 1.235 -9.5 0Q-1.235 -1.235 0 -9.5Z' fill='%23C9973E'/%3E%3Ccircle r='1.3' fill='%23FFF4D6'/%3E%3C/svg%3E");
+  --nt-stella-luce: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -20 40 40'%3E%3Cdefs%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23FFE7A0' stop-opacity='.95'/%3E%3Cstop offset='.35' stop-color='%23F2C14E' stop-opacity='.4'/%3E%3Cstop offset='1' stop-color='%23F2C14E' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle r='20' fill='url(%23g)'/%3E%3Cpath d='M0 -13Q1.69 -1.69 13 0Q1.69 1.69 0 13Q-1.69 1.69 -13 0Q-1.69 -1.69 0 -13Z' fill='%23F2C14E' stroke='%23B8893B' stroke-width='.6'/%3E%3Cpath d='M0 -6Q0.78 -0.78 6 0Q0.78 0.78 0 6Q-0.78 0.78 -6 0Q-0.78 -0.78 0 -6Z' fill='%23FFF6D8' transform='rotate(45)'/%3E%3Ccircle r='1.8' fill='%23FFFBEA'/%3E%3C/svg%3E");
+}
+
+/* ---------- Al posto delle bollicine: fiocchi di neve ---------- */
+/* Le bollicine dell'onda (posizioni, misure e tempi restano quelli di style.css) diventano fiocchi di neve che
+   scendono piano e spariscono quando toccano terra: l'onda è disegnata dopo di loro e li copre mentre ci entrano. Quelle dello sbuffo al cambio di sezione salgono come sempre, a forma di fiocco. */
+.tema-natale .onda__bolla {
+  width: calc(var(--d) * 2.6);
+  height: calc(var(--d) * 2.6);
+  border: 0;
+  border-radius: 0;
+  background: var(--nt-fiocco) center / contain no-repeat;
+  animation-name: natale-fiocco-scende;
+}
+@keyframes natale-fiocco-scende {
+  0%   { opacity: 0;  transform: translate(0, calc(var(--sale) * -1)) rotate(0deg); }
+  12%  { opacity: .9; }
+  50%  { transform: translate(3px, calc(var(--sale) * -.4)) rotate(60deg); }
+  100% { opacity: .9; transform: translate(-2px, calc(var(--onda-h) * var(--giu) + var(--d) * 2.6)) rotate(120deg); }
+}
+/* --giu: l'altezza da cui parte ogni fiocco (il suo `bottom` in style.css, come frazione dell'onda): è la strada che
+   gli resta per finire tutto sotto il bordo dell'onda */
+.tema-natale .onda__bolla { --giu: .6; }
+.tema-natale .onda__bolla:nth-child(3), .tema-natale .onda__bolla:nth-child(9) { --giu: .75; }
+.tema-natale .onda__bolla:nth-child(5) { --giu: .85; }
+.tema-natale .onda__bolla:nth-child(6) { --giu: .55; }
+.tema-natale .onda__bolla:nth-child(7) { --giu: .7; }
+.tema-natale .onda__bolla:nth-child(8) { --giu: .65; }
+.tema-natale .onda__bolla--extra { animation-name: bolla-sbuffo; }
+
+/* ---------- Il festone di luci ---------- */
+/* (natale.js: avviaFestone) Un filo a festoni lungo il bordo in alto dell'intestazione, con lampadine a goccia che
+   pulsano piano. Sopra la barra delle pillole, non riceve tocchi. */
+.festone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.festone svg { display: block; overflow: visible; }
+.festone__filo { fill: none; stroke: var(--brand); stroke-opacity: .55; stroke-width: .9; stroke-linecap: round; }
+.festone__attacco { fill: #6B5A3A; }
+.festone__lampada { stroke-width: .4; } /* colore del vetro e del bordo da natale.js */
+.festone__riflesso { fill: #fff; opacity: .7; }
+.festone__alone { opacity: .3; animation: luce-respira 3.2s ease-in-out infinite; } /* ritardo da natale.js */
+@keyframes luce-respira {
+  0%, 100% { opacity: .25; }
+  50%      { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .festone__alone { animation: none; opacity: .7; }
+}
+
+/* Stellina nel footer, accanto al © */
+.tema-natale .site-footer__copy::after {
+  content: "";
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  margin-left: .5em;
+  vertical-align: -.15em;
+  background: var(--nt-stella) center / contain no-repeat;
+}
+
+/* ---------- La cometa ---------- */
+/* (natale.js: passaCometa) Attraversa lo schermo in alto da destra a sinistra, scendendo un poco: la scia è inclinata
+   come il volo (--angolo). Sopra nav e «torna su», sotto i pop-up. Il tocco lo prende solo la testa (area larga). */
+.cometa {
+  position: fixed;
+  top: var(--y, 15vh);
+  left: 0;
+  z-index: 70;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  animation: cometa-vola 2.8s cubic-bezier(.35, .1, .65, .95) both;
+}
+@keyframes cometa-vola {
+  from { transform: translate(calc(100vw + 40px), 0); }
+  to   { transform: translate(-260px, var(--cala, 12vh)); }
+}
+.cometa__coda {
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: clamp(130px, 32vw, 240px);
+  height: 2px;
+  border-radius: 2px;
+  transform-origin: 0 50%;
+  transform: rotate(var(--angolo, -5deg));
+  background: linear-gradient(90deg, rgba(242, 193, 78, .95), rgba(242, 193, 78, .45) 35%, transparent);
+}
+.cometa__coda::after { /* alone della scia */
+  content: "";
+  position: absolute;
+  inset: -3px 0;
+  border-radius: 6px;
+  background: inherit;
+  opacity: .35;
+  filter: blur(3px);
+}
+.cometa__testa {
+  position: absolute;
+  left: -24px;
+  top: -24px;
+  width: 48px;
+  height: 48px;
+  pointer-events: auto;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  background: var(--nt-stella-luce) center / 36px 36px no-repeat;
+  animation: cometa-ruota 1.4s linear infinite;
+}
+@keyframes cometa-ruota { to { transform: rotate(360deg); } }
+/* Le stelline in cui si apre la cometa toccata (natale.js: scoppio) */
+.stellina {
+  position: fixed;
+  z-index: 70;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  pointer-events: none;
+  background: var(--nt-stella) center / contain no-repeat;
+  animation: stellina-vola .95s cubic-bezier(.2, .7, .4, 1) both;
+}
+@keyframes stellina-vola {
+  from { opacity: 1; transform: translate(0, 0) scale(.4) rotate(0deg); }
+  60%  { opacity: 1; }
+  to   { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1) rotate(140deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cometa, .stellina { display: none; }
+}
+
+/* ---------- Il gatto con la sciarpa ---------- */
+/* (natale.js: gatto.disegnaSopra) Sciarpa verde abete a righe crema: il giro al collo e il capo che sventola dietro */
+.gatto__sciarpa { fill: var(--nt-abete); }
+.gatto__sciarpa-righe { fill: none; stroke: #FEE2B3; stroke-width: .7; stroke-linecap: round; }
+.gatto__sciarpa-frange { fill: none; stroke: var(--nt-abete); stroke-width: .6; stroke-linecap: round; }
+.gatto__sciarpa-coda {
+  transform-box: view-box;
+  transform-origin: 32px 14px;
+  animation: sciarpa-sventola .45s ease-in-out infinite alternate;
+}
+.gatto--fusa .gatto__sciarpa-coda { animation-play-state: paused; }
+.gatto--scappa .gatto__sciarpa-coda { animation-duration: .15s; }
+@keyframes sciarpa-sventola {
+  from { transform: rotate(-7deg); }
+  to   { transform: rotate(5deg); }
+}
+
+/* ---------- Il cappello sul logo ---------- */
+/* Un cappello di Babbo Natale appoggiato sull'angolo in alto a sinistra della cornice del logo, inclinato verso
+   l'esterno, con il pon pon che ricade fuori. È il ::before del titolo (h1), che è alto quanto il logo (line-height 0)
+   e lo ha al centro: posizione e misure sono frazioni di --logo-w, a partire dal centro. */
+.tema-natale .site-header__title { position: relative; }
+.tema-natale .site-header__title::before {
+  content: "";
+  position: absolute;
+  /* Calzato sull'angolo della cornice: nel disegno del logo (820 × 404) la cornice parte a 8 px dal bordo e l'angolo
+     è un arco di raggio 52, il cui punto di mezzo sta a 23 px (2,8%) dal bordo in tutte e due le direzioni. Il
+     cappello è inclinato di 45° e la pelliccia copre quell'arco, come se fosse calzato. Larghezza --cappello; il
+     centro del riquadro sta a +2,2% di --logo-w dall'angolo del logo, in orizzontale e in verticale (misurato a occhio
+     sugli screenshot: se cambi misura o disegno, ricontrolla). */
+  --cappello: calc(var(--logo-w) * .19);
+  left: calc(50% - var(--logo-w) * .478 - var(--cappello) / 2);
+  top: calc(var(--logo-w) * .022 - var(--cappello) / 2);
+  width: var(--cappello);
+  aspect-ratio: 1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cdefs%3E%3ClinearGradient id='v' x1='0' y1='.6' x2='1' y2='.2'%3E%3Cstop offset='0' stop-color='%237E0A1C'/%3E%3Cstop offset='.4' stop-color='%23B70F2A'/%3E%3Cstop offset='.75' stop-color='%23D41F38'/%3E%3Cstop offset='1' stop-color='%23E64A5E'/%3E%3C/linearGradient%3E%3ClinearGradient id='p' x1='.2' y1='0' x2='.5' y2='1'%3E%3Cstop offset='0' stop-color='%23DE3349'/%3E%3Cstop offset='.55' stop-color='%23B30F29'/%3E%3Cstop offset='1' stop-color='%23860B1F'/%3E%3C/linearGradient%3E%3CradialGradient id='lu' cx='.5' cy='.5' r='.5'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='.35'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/radialGradient%3E%3ClinearGradient id='f' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23FFFFFB'/%3E%3Cstop offset='.6' stop-color='%23F6EEE0'/%3E%3Cstop offset='1' stop-color='%23DCCDB4'/%3E%3C/linearGradient%3E%3CradialGradient id='b' cx='.38' cy='.32' r='.7'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.6' stop-color='%23F3EADB'/%3E%3Cstop offset='1' stop-color='%23D5C5AA'/%3E%3C/radialGradient%3E%3Cfilter id='pelo' x='-15%25' y='-30%25' width='130%25' height='160%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='3'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='3.6' xChannelSelector='R' yChannelSelector='G'/%3E%3C/filter%3E%3Cfilter id='sfuma'%3E%3CfeGaussianBlur stdDeviation='1.6'/%3E%3C/filter%3E%3C/defs%3E%3Cpath d='M18 88C21 64 32 43 50 30C61 22 73 18 83 22C95 30 103 56 105 88Z' fill='url(%23v)'/%3E%3Cg filter='url(%23sfuma)' fill='none' stroke-linecap='round'%3E%3Cpath d='M44 40C38 54 35 70 36 86' stroke='%235E0614' stroke-width='3.2' opacity='.45'/%3E%3Cpath d='M70 30C68 48 70 68 76 86' stroke='%235E0614' stroke-width='2.6' opacity='.35'/%3E%3Cpath d='M88 36C92 52 96 70 98 86' stroke='%23fff' stroke-width='3' opacity='.25'/%3E%3Cpath d='M56 38C54 56 55 72 58 86' stroke='%23fff' stroke-width='2.2' opacity='.18'/%3E%3C/g%3E%3Cellipse cx='86' cy='54' rx='12' ry='22' fill='url(%23lu)'/%3E%3Cpath d='M84 26C72 20 56 22 44 30C34 37 27 46 23 57C31 50 40 46 50 44C62 40 74 34 84 26Z' fill='%234A0510' opacity='.45' filter='url(%23sfuma)'/%3E%3Cpath d='M83 22C73 14 57 14 43 22C32 29 24 40 20 52C28 45 37 41 47 39C60 35 72 30 83 22Z' fill='url(%23p)'/%3E%3Cpath d='M78 21C68 17 56 18 46 23' fill='none' stroke='%23fff' stroke-width='1.6' opacity='.25' stroke-linecap='round' filter='url(%23sfuma)'/%3E%3Cpath d='M16 86C44 76 80 76 108 86' fill='none' stroke='%233E040D' stroke-width='5' opacity='.35' filter='url(%23sfuma)'/%3E%3Cg filter='url(%23pelo)'%3E%3Cpath d='M9 87C40 76 80 76 111 87C114 93 112 100 107 103C79 94 41 94 13 105C8 101 7 93 9 87Z' fill='url(%23f)'/%3E%3Ccircle cx='19' cy='55' r='10' fill='url(%23b)'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+  transform: rotate(-45deg);
+  filter: drop-shadow(1px 2px 1.5px rgba(42, 18, 22, .28));
+  pointer-events: none;
+}
+
+/* ---------- Sipario d'apertura: la nevicata ---------- */
+/* Stessi tempi del sipario normale (logo fermo al centro fino al 25% di 1.6s, poi sale girando; il velo si ritira
+   insieme). Sul velo nevica: due strati di fiocchi a velocità diverse, il velo li porta via con sé.
+   Si anima il titolo (h1) invece del logo, con la stessa animazione (sipario-logo): così il cappello, che è dentro il
+   titolo, gira e sale con il logo. Il titolo è alto quanto il logo e ha lo stesso centro, quindi il giro (attorno al
+   centro) è identico. */
+.tema-natale .sipario::before,
+.tema-natale .sipario::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -440px;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'%3E%3Cdefs%3E%3Cpath id='a' d='M0 0V-8.4M-2.3-6.9L0-4.9L2.3-6.9M-1.6-3.3L0-2.1L1.6-3.3'/%3E%3Cg id='f'%3E%3Cuse href='%23a'/%3E%3Cuse href='%23a' transform='rotate(60)'/%3E%3Cuse href='%23a' transform='rotate(120)'/%3E%3Cuse href='%23a' transform='rotate(180)'/%3E%3Cuse href='%23a' transform='rotate(240)'/%3E%3Cuse href='%23a' transform='rotate(300)'/%3E%3C/g%3E%3Cg id='k' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cuse href='%23f' stroke='%23731223' stroke-opacity='.5' stroke-width='3'/%3E%3Cuse href='%23f' stroke='%23fff' stroke-width='1.5'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23k' opacity='0.9' transform='translate(30 40) rotate(30) scale(0.5)'/%3E%3Cuse href='%23k' opacity='0.7' transform='translate(150 22) rotate(30) scale(0.32)'/%3E%3Cuse href='%23k' opacity='1' transform='translate(98 112) rotate(38) scale(0.62)'/%3E%3Cuse href='%23k' opacity='0.8' transform='translate(190 148) rotate(10) scale(0.42)'/%3E%3Cuse href='%23k' opacity='0.75' transform='translate(44 176) rotate(44) scale(0.36)'/%3E%3Cuse href='%23k' opacity='0.6' transform='translate(132 196) rotate(12) scale(0.28)'/%3E%3Cuse href='%23k' opacity='0.55' transform='translate(72 70) rotate(12) scale(0.26)'/%3E%3Cuse href='%23k' opacity='0.65' transform='translate(205 70) rotate(25) scale(0.3)'/%3E%3C/svg%3E") 0 0 / 220px 220px repeat;
+  will-change: transform;
+  animation: natale-nevica 1.8s linear both;
+}
+.tema-natale .sipario::after {
+  top: -600px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cdefs%3E%3Cpath id='a' d='M0 0V-8.4M-2.3-6.9L0-4.9L2.3-6.9M-1.6-3.3L0-2.1L1.6-3.3'/%3E%3Cg id='f'%3E%3Cuse href='%23a'/%3E%3Cuse href='%23a' transform='rotate(60)'/%3E%3Cuse href='%23a' transform='rotate(120)'/%3E%3Cuse href='%23a' transform='rotate(180)'/%3E%3Cuse href='%23a' transform='rotate(240)'/%3E%3Cuse href='%23a' transform='rotate(300)'/%3E%3C/g%3E%3Cg id='k' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cuse href='%23f' stroke='%23731223' stroke-opacity='.5' stroke-width='3'/%3E%3Cuse href='%23f' stroke='%23fff' stroke-width='1.5'/%3E%3C/g%3E%3C/defs%3E%3Cuse href='%23k' opacity='0.85' transform='translate(60 80) rotate(0) scale(0.95)'/%3E%3Cuse href='%23k' opacity='0.9' transform='translate(230 190) rotate(50) scale(1.1)'/%3E%3Cuse href='%23k' opacity='0.7' transform='translate(150 270) rotate(30) scale(0.8)'/%3E%3Cuse href='%23k' opacity='0.6' transform='translate(270 40) rotate(30) scale(0.7)'/%3E%3C/svg%3E") 0 0 / 300px 300px repeat;
+  animation-name: natale-nevica-vicina;
+}
+@keyframes natale-nevica {
+  from { opacity: 0; transform: translateY(0); }
+  15%  { opacity: 1; }
+  to   { opacity: 1; transform: translateY(440px); }
+}
+@keyframes natale-nevica-vicina {
+  from { opacity: 0; transform: translate(0, 0); }
+  15%  { opacity: 1; }
+  to   { opacity: 1; transform: translate(-30px, 600px); }
+}
+/* Il logo resta fermo dentro il titolo e non posizionato (il sipario normale lo posiziona per portarlo sopra il velo):
+   altrimenti durante il sipario passerebbe davanti al cappello */
+.tema-natale:not(.senza-intro) .site-header__logo { animation: none; position: static; }
+.tema-natale:not(.senza-intro) .site-header__title {
+  --intro-dy: calc(50vh - var(--header-pt) - var(--logo-w) * 404 / 1640);
+  animation: sipario-logo 1.6s linear .1s both, sipario-sopra 1.8s linear;
+}
+@supports (height: 1dvh) {
+  .tema-natale:not(.senza-intro) .site-header__title { --intro-dy: calc(50dvh - var(--header-pt) - var(--logo-w) * 404 / 1640); }
+}
+
+@media print {
+  .tema-natale .site-footer__copy::after,
+  .tema-natale .site-header__title::before,
+  .festone, .cometa, .stellina { display: none; }
+}
