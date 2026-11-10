@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pagina non trovata — Bivio Bistrot</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#1C1411">
+  <link rel="icon" type="image/png" href="/assets/brand/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
+  <!-- Servita per qualsiasi indirizzo sbagliato, anche profondo: tutti i percorsi sono assoluti dalla radice. -->
+  <link rel="stylesheet" href="/assets/base.css">
+  <style>
+    body { background: #1C1411; color: #F5E6CC; }
+    .non-trovata {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100svh;
+      padding: 48px var(--gutter);
+      text-align: center;
+    }
+    .non-trovata__logo {
+      width: min(60vw, 260px);
+      height: auto;
+      margin: 0 auto 2rem;
+    }
+    .non-trovata__titolo {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(2rem, 1.5rem + 2.5vw, 3rem);
+      line-height: 1.15;
+    }
+    .non-trovata__testo {
+      margin-top: 1rem;
+      max-width: 32rem;
+      font-size: 1.0625rem;
+      text-wrap: balance;
+    }
+    .non-trovata__testo--en {
+      margin-top: .5rem;
+      font-size: .9375rem;
+      opacity: .65;
+    }
+    .non-trovata__azioni {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 2rem;
+    }
+    .non-trovata__link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: .75rem 1.5rem;
+      border: 1px solid rgba(254, 226, 179, .6);
+      border-radius: 8px;
+      font-size: .9375rem;
+      font-weight: 500;
+      line-height: 1.2;
+      text-decoration: none;
+      color: var(--brand-cream);
+      transition: background-color .2s var(--ease);
+    }
+    .non-trovata__link--pieno { background: var(--brand-cream); border-color: var(--brand-cream); color: var(--brand); }
+    .non-trovata__link--pieno:hover { background: #fff3dc; }
+    .non-trovata__link:not(.non-trovata__link--pieno):hover { background: rgba(254, 226, 179, .12); }
+    .non-trovata__link:focus-visible { outline: 2px solid var(--brand-cream); outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <main class="non-trovata">
+    <img class="non-trovata__logo" src="/assets/brand/logo-cream.png" width="820" height="404" alt="Bivio Bistrot">
+    <h1 class="non-trovata__titolo">Pagina non trovata</h1>
+    <p class="non-trovata__testo">Questa strada non porta da nessuna parte. Torna al bivio:</p>
+    <p class="non-trovata__testo non-trovata__testo--en" lang="en">Page not found. This road leads nowhere: head back to the crossroads.</p>
+    <div class="non-trovata__azioni">
+      <a class="non-trovata__link non-trovata__link--pieno" href="/">Il locale</a>
+      <a class="non-trovata__link" href="/menu/">Il menu</a>
+    </div>
+  </main>
+</body>
+</html>

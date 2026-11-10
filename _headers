@@ -1,0 +1,7 @@
+# Intestazioni di sicurezza inviate da Cloudflare con ogni file del sito.
+# Evitano che il browser indovini il tipo dei file e che il sito venga incorporato in pagine di altri.
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
