@@ -22,7 +22,7 @@
   // ---------------------------------------------------------------- Testi
   /** Traduzioni inglesi dei testi scritti nell'HTML (chiave = data-i18n…). */
   var EN = {
-    "meta.title": "Bivio Bistrot — Rome",
+    "meta.title": "Bivio Bistrot Rome — Food, wines and cocktails in Prati",
     "meta.description": "Bivio Bistrot, a bistrot in Rome on Piazza Monte Grappa (Prati): seasonal cooking with Sicilian roots, breakfast in the morning, wines and cocktails late.",
     "skip": "Skip to content",
     "langLabel": "Language",
